@@ -10,13 +10,13 @@ module Tumblr4Rails
       Tumblr4Rails::Tumblr.all_posts(options)
     end
     
-    def self.get_by_id(id)
-      Tumblr4Rails::Tumblr.get_by_id(id)
+    def self.get_by_id(id, json=false, callback=nil)
+      Tumblr4Rails::Tumblr.get_by_id(id, json, callback)
     end
     
     def save(additional_params={})
       begin
-        return save!(additional_params).code.to_i == 200
+        return save!(additional_params).code.to_i == 201
       rescue
         return false
       end
@@ -25,11 +25,20 @@ module Tumblr4Rails
     def save!(additional_params={})
       raise Tumblr4Rails::ReadOnlyModelException.new("Cannot save a readonly model.") if readonly?
       response = do_save!(additional_params)
-      self.instance_variable_set(:@tumblr_id, response.new_id) if response.code.to_i == 200
+      after_save(response)
       response
     end
     
     private
+    
+    def after_save(response)
+      if response.code.to_i == 201
+        self.instance_variable_set(:@tumblr_id, response.new_id)
+        remove_accessors
+        self.instance_variable_set(:@readonly, true)
+        create_accessors
+      end
+    end
     
     def do_save!(additional_params={})
       #hook

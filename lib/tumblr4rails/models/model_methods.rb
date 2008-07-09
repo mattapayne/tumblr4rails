@@ -28,6 +28,19 @@ module Tumblr4Rails
       end
     end
     
+    def remove_accessors
+      accessors = attr_accessors
+      readonly = @readonly
+      singleton_class.class_eval do
+        accessors.each do |a| 
+          remove_method(a)
+          unless readonly
+            remove_method("#{a}=".to_sym)
+          end
+        end
+      end
+    end
+    
     def has?(attr, attributes, type=Array)
       return false if attributes.blank?
       attributes.key?(attr) && !attributes[attr].blank? && attributes[attr].is_a?(type)

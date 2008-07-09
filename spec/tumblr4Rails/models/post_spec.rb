@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 
 describe Tumblr4Rails::Post do
   
-  def mock_response(code="200")
+  def mock_response(code="201")
     resp = mock("Response")
     resp.stub!(:code).and_return(code)
     resp.stub!(:new_id).and_return("553454")
@@ -24,7 +24,7 @@ describe Tumblr4Rails::Post do
   end
   
   it "should delegate the work to the Tumblr4Rails::Tumblr class when get_by_id is called" do
-    Tumblr4Rails::Tumblr.should_receive(:get_by_id).with(1)
+    Tumblr4Rails::Tumblr.should_receive(:get_by_id).with(1, false, nil)
     Tumblr4Rails::Post.get_by_id(1)
   end
   
@@ -57,8 +57,9 @@ describe Tumblr4Rails::Post do
     @post.save!
   end
   
-  it "should set the tumblr_id on the model if the response code is 200" do
+  it "should set the model to readonly and update its tumblr_id if the response code is 201" do
     @post.stub!(:do_save!).and_return(mock_response)
+    @post.should_receive(:instance_variable_set).with(:@readonly, true)
     @post.should_receive(:instance_variable_set).with(:@tumblr_id, "553454")
     @post.save!
   end

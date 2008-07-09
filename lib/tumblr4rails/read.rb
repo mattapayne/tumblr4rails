@@ -41,11 +41,15 @@ module Tumblr4Rails
       @@read_param_aliases = {:limit => :num, :index => :start}.freeze
       @@allowed_tumblr_numbers = 1..50
       
-      def get_by_id(id)
+      def get_by_id(id, json=false, callback=nil)
         return if id.blank?
-        posts = posts(:id => id)
-        return posts.first if (posts && posts.size == 1)
-        return posts
+        posts = posts(:id => id, :json => json, :callback => callback)
+        unless json
+          return posts.first if (posts && posts.size == 1)
+          return posts
+        else
+          return posts
+        end
       end
       
       #Options:
