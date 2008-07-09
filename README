@@ -1,23 +1,23 @@
 Tumblr4Rails
 ============
 
-Tumblr4Rails is a plugin that adds a method called 'tumblr' to any controller
-that calls 'use_tumblr' in it's class deinition.
-
 Tumblr4Rails allows a Rails application to make use of the Tumblr API
-http://www.tumblr.com/api
+http://www.tumblr.com/api without simply ansd without doing dirty things
+to your Rails classes.
+
+** Only Rails 2.1 is supported **
 
 Configuration
 =============
 
-Tumblr4Rails can be configured to 2 different modes:
+Tumblr4Rails can be configured to use 2 different modes:
 
-1) Application: The Tumblr email, password and log_name are all statically set
+1) Application: The Tumblr email, password, read_url and write_url are all statically set
    when the application starts. It is never necessary to provide these values to
-   the Tumblr methods calls. The obvious implication of this mode is that you can only access
+   the Tumblr methods call. The obvious implication of this mode is that you can only access
    the Tumblr account that you've specified.
 
-2) Request: The Tumblr email, password and log_name must be specified with each
+2) Request: The Tumblr email, password, read_url and/or write_url must be specified with each
    request.
 
 *** The default configuration is request if no configuration is provided. ***
@@ -49,38 +49,90 @@ For :application
     1) request_type must be set to :application.
     2) email must be set to your tumblr email.
     3) password must be set to your tumblr password.
-    4) log_name must be set to the name of your tumblr log (ie: http://(log_name).tumblr.com/api)
+    4) read_url must be set to the name of your tumblr log (ie: http://(log_name).tumblr.com/api)
+    5) write_url can optionally be set. It defaults to http://www.tumblr.com/api/write
     - Setting any other value will result in an exception being thrown.
 
 The API (Consists of a Read API and a Write API)
 ================================================
 
-On the controller: (if use_tumblr is called in the controller definition)
+The Tumblr4Rails plugin can be used from any controller, model, helper or even view if you desire.
 
-1) Tumblr - returns an instance of the Tumblr4Rails::Tumblr class. This is the object
-   that will be mostly worked with. All methods are class methods.
+You can also include the Tumblr4Rails module if you'd rather not have to specify the module name.
 
-Throughout the application: Tumblr4Rails::Tumblr (You can also just include Tumblr4Rails)
+Additionally, each controller has a class method of simply: use_tumblr. This causes the Tumblr4Rails
+module to be included in your controller class. Use like so:
+
+class MyController < ApplicationController
+	use_tumblr
+	#other stuff
+end
+
+So its possible to make calls against either Tumblr4Rail::Tumblr or just Tumblr if the Tumblr4Rails
+module has been included.
+
+Additionally, there is an object model that can be used. The object model consists of classes
+representing Tumblr posts. These are:
+
+AudioPost, LinkPost, RegularPost, VideoPost, ConversationPost, PhotoPost and QuotePost. All
+inherit from a base class called Post.
 
 Read API
 ========
 
-**Note that Tumblr will never return more than 50 posts. It will default to 20 if you
+**Note that Tumblr will never return more than 50 posts (at least at the time of writing). It will default to 20 if you
 don't specify a limit/num of greater than 20. You can ask for less by specifying a low limit/num**
 
-1) posts(options) - :id, :limit (alias for :num), :index (alias for :start), :type, :num, :start
-2) text_posts(options={}) - :limit (alias for :num), :index (alias for :start), :num, :start
-3) photo_posts(options={}) - :limit (alias for :num), :index (alias for :start), :num, :start
-4) quote_posts(options={}) - :limit (alias for :num), :index (alias for :start), :num, :start
-5) link_posts(options={}) - :limit (alias for :num), :index (alias for :start), :num, :start
-6) conversation_posts(options={}) - :limit (alias for :num), :index (alias for :start), :num, :start
-7) audio_posts(options={}) - :limit (alias for :num), :index (alias for :start), :num, :start
-8) video_posts(options={}) - :limit (alias for :num), :index (alias for :start), :num, :start
-9) all_posts(options={}) - :limit (alias for :num), :index (alias for :start), :num, :start
-10) get_by_id(id) - id = The post id.
+Read methods available on the Tumblr4Rails::Tumblr object (all are class methods):
+==================================================================================
 
-Each of the above methods returns an instance of Tumblr4Rails::Posts which can be treated as
-an array (it extends Array).
+1) posts(options) - :id, :limit (alias for :num), :index (alias for :start), :type, :num, :start, :json, :callback
+2) text_posts(options={}) - :limit (alias for :num), :index (alias for :start), :num, :start, :json, :callback
+3) photo_posts(options={}) - :limit (alias for :num), :index (alias for :start), :num, :start, :json, :callback
+4) quote_posts(options={}) - :limit (alias for :num), :index (alias for :start), :num, :start, :json, :callback
+5) link_posts(options={}) - :limit (alias for :num), :index (alias for :start), :num, :start, :json, :callback
+6) conversation_posts(options={}) - :limit (alias for :num), :index (alias for :start), :num, :start, :json, :callback
+7) audio_posts(options={}) - :limit (alias for :num), :index (alias for :start), :num, :start, :json, :callback
+8) video_posts(options={}) - :limit (alias for :num), :index (alias for :start), :num, :start, :json, :callback
+9) all_posts(options={}) - :limit (alias for :num), :index (alias for :start), :num, :start, :json, :callback
+10) get_by_id(id, json=false, callback=nil) - id = The post id, json - whether to return json or not, callback - name of a js
+callback to call with the results.
+
+Examples:
+=========
+
+posts = Tumblr4Rails::Tumblr.link_posts(:limit => 1, :start => 3) - gets one link post, beginning at index 3
+posts = Tumblr4Rails::Tumblr.all_posts(:limit => 25) - gets 25 (or less if there is not 25) of any post.
+posts = Tumblr4Rails::Tumblr.photo_posts(:json => true) - returns up to 20 photo posts in json format.
+posts = Tumblr4Rails::Tumblr.conversation_posts(:json => true, :callback => "showResults") - returns up to 20 conversation posts
+in json format with a callback.
+
+Read methods available on the Post objects (all are class methods):
+===================================================================
+
+1) get(options={}) :limit (alias for :num), :index (alias for :start), :num, :start, :json, :callback
+2) get_by_id(id, json=false, callback=nil) - Only on Tumblr4Rails::Post
+
+Examples:
+=========
+
+posts = Tumble4Rails::LinkPost.get() - returns all link posts
+posts = Tumblr4Rails::RegularPost.get(:limit => 5) - returns 5 regular posts (or less if there are not 5)
+post = Tumblr4Rails::Post.get_by_id(1223443, true, "showResult") - returns the post corresponding to the specified id in the form of a
+callback containing the results as JSON.
+
+Read Return Values:
+===================
+
+Each of the above methods (unless JSON is specified) returns an instance of Tumblr4Rails::Posts which can be treated as
+an array (it extends Array), with the exception of get_by_id, which returns an instance of
+Tumblr4Rails::XXXPost (depending on the type of post it it).
+
+If JSON is requested, the results are returned as a string that can be eval'd and used in js. For an example of the
+format, see: http://www.tumblr.com/api
+
+Note that all Post objects contained within the Tumblr4Rails::Posts class are readonly. Tumblr does not provide
+for the ability to do updates.
 
 The Tumblr4Rails::Posts class has the following properties:
 
@@ -91,26 +143,169 @@ The Tumblr4Rails::Posts class has the following properties:
 4) tumblelog - an object representing the tumblelog data
         - feeds, name, timezone, title
 
-Post Classes
-============
+The general schema of the Tumblr4Rails object model:
 
-The following classes will be returned from a Tumblr read:
-
-Tumblr4Rails::AudioPost, Tumblr4Rails::ConversationPost, Tumblr4Rails::LinkPost, 
-Tumblr4Rails::PhotoPost, Tumblr4Rails::QuotePost, Tumblr4Rails::RegularPost, 
-Tumblr4Rails::VideoPost
-
-The base class for each of these is Tumblr4Rails::Post
-
-Each of these classes can be used to read data as well.
-
-For example:
-
-Tumblr4Rails::Post.get() will return all posts of any type starting from index 0
-limiting the results to 20.
-
-Tumblr4Rails::AudioPost.get(:limit => 2, :index => 1) will return a Tumblr4Rails::Posts collection
-containing 2 link posts (if there were 2) starting from index 1.
+Tumble4Rails::Posts (inherits from Array)
+	- Tumblr4Rails::XXXPost (0 or more)
+			- tumblr_id, 
+			- post_type, 
+			- date_gmt, 
+			- date, 
+			- unix_timestamp, 
+			- url
+			- ** Each post type also has several type-specific attributes. See the bottom for details. **
+	- start
+	- total
+	- post_type
+	- tumblelog
+			- name
+			- timezone
+			- title
+			- feeds (Array)
+ 				 - (has 0 or more) Tumblr4Rails::Feed
+ 				 			- tumblr_id, 
+ 				 			- url, 
+ 				 			- import_type, 
+ 				 			- next_update_in_seconds, 
+      				- title, 
+      				- error_text
+      				
+Write API:
+==========
  
+ Writing to the Tumblr API using Tumblr4Rails can take several forms. You can
+ use the class methods provided by the Tumblr4Rails::Tumblr class or you can
+ use the save and save! instance methods provided by the Post objects.
+ 
+ In all cases, a Tumblr4Rails::PostCreationResponse is returned that provides
+ access to the response code, the response message and response body. Typically
+ the response body will be the id of the newly-created post.
+
+Write methods available on the Tumblr4Rails::Tumblr object (all are class methods):
+==================================================================================
+
+** Note: In all cases, the additional_options hash can take the following parameters:
+  				- :generator - The name of the application that created the post.
+  				- :private - A value indicating whether the post is public or private. This
+  									  can be either 1 or 0 or true or false.
+  				- :group - If a group is specified, the post will be published to the group,
+  									not the individual's Tumblelog.
+  				- :format - either html or markdown
+  				- :tags - a string containing a comma-separated list of tags to apply to the post.
+  				- :date - the post date - can't be in the future. **
+  				
+1) create_regular_post(title, body, additional_options={})
+2) create_link_post(url, name=nil, description=nil, additional_options={})
+3) create_photo_post(source=nil, data=nil, caption=nil, additional_options={})
+4) create_audio_post(source=nil, data=nil, caption=nil, additional_options={}) #Note that either source or data must be present.
+5) create_video_post(embed=nil, data=nil, title=nil, caption=nil, additional_options={}) #Note that either embed or data must be present.
+6) create_conversation_post(conversation, title=nil, additional_options={}) #Note that the converation should be separated by newlines
+   in order to appear properly in the Tumblr UI. See the comments in the code.
+7) create_quote_post(quote, source=nil, additional_options={})
+
+Examples:
+========
+
+result = Tumblr4Rails::Tumble.create_regular_post("This is the title", "This is the body", {:generator => "Tumblr4Rails"})
+
+Write methods available on the Post objects (all are class methods):
+===================================================================
+
+**Note - When a new post is created in this manner, if it is created successfully, it's tumblr_id will be set
+and it's accessors will all become readonly.**
+
+1) save(additional_options={}) - returns true if the post was saved successfully, false otherwise
+2) save!(additional_options={}) - raises exceptions if there was a problem with the save
+
+Examples:
+=========
+
+post = Tumblr4Rails::RegularPost.new(:title => "This is the title", :body => "This is the body")
+post.save(:generator => "Tumblr4Rails") #true/false
+-or-
+post.save!(:generator => "Tumblr4Rails", :date => Date.today)
+
+post = Tumblr4Rails::LinkPost.new
+post.url = "http://www.google.ca"
+post.name = "This is a link to Google"
+post.description = "This is a link to Google"
+post.save
+-or-
+post.save!
+
+post.url = "http://www.somethingelse.com" #exception because url= is no longer available since the post
+                                           has been created.
+                   
+Other Write API methods:
+========================
+
+1) authenticated?(options={}) - returns true if the username/password combination is good
+2) video_upload_permissions(options={}) - returns an instance of Tumblr4Rails::UploadPermission
+   ** See the Tumblr API notes on this: http://www.tumblr.com/api                 
+3) can_upload_audio?(options={}) - returns true if the user can upload audio
+
+Examples:
+=========
+
+Tumblr4Rails::Tumblr.authenticated? #true/false
+Tumblr4Rails::Tumblr.authenticated?(:email => "test@test.ca", :password => "dddd") #true/false
+
+Tumblr4Rails::Tumblr.video_upload_permissions #Tumblr4Rails::UploadPermission
+Tumblr4Rails::Tumblr.video_upload_permissions(:email => "test@test.ca", :password => "dddd")
+
+Tumblr4Rails::Tumblr.can_upload_audio? #true/false
+Tumblr4Rails::Tumblr.can_upload_audio?(:email => "test@test.ca", :password => "dddd") #true/false
+
+Additional Post Object Attributes:
+==================================
+
+In addition to the attributes described above, each Post type has several specific attributes.
+
+1) Tumblr4Rails::LinkPost
+		- source_url
+		- name
+		- description
+		- bookmarklet
+
+2) Tumblr4Rails::AudioPost
+		- audio_caption
+		- audio_plays
+		- audio_player
+		- source
+		- data
+		
+3) Tumblr4Rails::ConversationPost
+		- title
+		- conversation
+		- lines (Array)
+				- Tumblr4Rails::ConversationLine (0 or many)
+						- name
+						- label
+						- content
+
+4) Tumblr4Rails::PhotoPost
+		- caption
+		- source
+		- data
+		- urls (Array)
+				- Tumblr4Rails::PhotoUrl (0 or many)
+						- max_size
+						- url
+						
+5) Tumblr4Rails::QuotePost
+		- quote
+		- source
+		
+6) Tumblr4Rails::RegularPost
+		- title
+		- body
+		
+7) Tumblr4Rails::VideoPost
+		- caption
+		- source
+		- title
+		- player
+		- embed
+		- data
 
 Copyright (c) 2008 Matt Payne, released under the MIT license
