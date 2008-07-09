@@ -2,7 +2,7 @@ Tumblr4Rails
 ============
 
 Tumblr4Rails allows a Rails application to make use of the Tumblr API
-http://www.tumblr.com/api without simply ansd without doing dirty things
+http://www.tumblr.com/api simply and without doing dirty things
 to your Rails classes.
 
 ** Only Rails 2.1 is supported **
@@ -68,7 +68,7 @@ class MyController < ApplicationController
 	#other stuff
 end
 
-So its possible to make calls against either Tumblr4Rail::Tumblr or just Tumblr if the Tumblr4Rails
+So it's possible to make calls against either Tumblr4Rail::Tumblr or just Tumblr if the Tumblr4Rails
 module has been included.
 
 Additionally, there is an object model that can be used. The object model consists of classes
@@ -126,7 +126,7 @@ Read Return Values:
 
 Each of the above methods (unless JSON is specified) returns an instance of Tumblr4Rails::Posts which can be treated as
 an array (it extends Array), with the exception of get_by_id, which returns an instance of
-Tumblr4Rails::XXXPost (depending on the type of post it it).
+Tumblr4Rails::XXXPost (depending on the type of post it is).
 
 If JSON is requested, the results are returned as a string that can be eval'd and used in js. For an example of the
 format, see: http://www.tumblr.com/api
