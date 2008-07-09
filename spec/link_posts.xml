@@ -1,0 +1,33 @@
+<tumblr version="1.0">
+    <tumblelog name="mpayne" timezone="US/Eastern" title="Coding with headphones">
+        <feeds>
+            <feed id="235529" url="http://twitter.com/statuses/user_timeline/15119954.rss" import-type="regular-no-title" next-update-in-seconds="383" title="Twitter / mapayne" error-text="true"/>
+        </feeds>
+    </tumblelog>
+    <posts start="0" total="5" type="link">
+        <post id="40595236" url="http://mpayne.tumblr.com/post/40595236" type="link" date-gmt="2008-07-01 20:30:17 GMT" date="Tue, 01 Jul 2008 16:30:17" unix-timestamp="1214944217">
+            <link-text>Ha - Tim Hortons'</link-text>
+            <link-url>http://spine.stevedinn.com/article.php?sid=369</link-url>
+            <link-description>This is funny because today at Tim Hortons&#8217; the kid couldn&#8217;t figure out what $5.00 minus $4.10 was!</link-description>
+        </post>
+        <post id="39730397" url="http://mpayne.tumblr.com/post/39730397" type="link" date-gmt="2008-06-25 03:24:30 GMT" date="Tue, 24 Jun 2008 23:24:30" unix-timestamp="1214364270">
+            <link-text>This is truly some funny shit</link-text>
+            <link-url>http://icanhascheezburger.com/</link-url>
+            <link-description>Pictures of animals, but insanely funny.</link-description>
+        </post>
+        <post id="39394728" url="http://mpayne.tumblr.com/post/39394728" type="link" date-gmt="2008-06-21 14:35:46 GMT" date="Sat, 21 Jun 2008 10:35:46" unix-timestamp="1214058946">
+            <link-text>JamBase4Rails now on GoogleCode</link-text>
+            <link-url>http://code.google.com/p/jambase4rails</link-url>
+            <link-description>JamBase4Rails now on GoogleCode</link-description>
+        </post>
+        <post id="39394663" url="http://mpayne.tumblr.com/post/39394663" type="link" date-gmt="2008-06-21 14:34:46 GMT" date="Sat, 21 Jun 2008 10:34:46" unix-timestamp="1214058886">
+            <link-text>JamBase4Rails publicized</link-text>
+            <link-url>http://agilewebdevelopment.com/plugins/jambase4rails</link-url>
+            <link-description>Jambase4Rails now listed on the Agile Web Dev page</link-description>
+        </post>
+        <post id="38706348" url="http://mpayne.tumblr.com/post/38706348" type="link" date-gmt="2008-06-17 05:46:07 GMT" date="Tue, 17 Jun 2008 01:46:07" unix-timestamp="1213681567" bookmarklet="true">
+            <link-text>Relevance, Inc.</link-text>
+            <link-url>http://blog.thinkrelevance.com/2008/6/16/10-must-have-rails-plugins</link-url>
+        </post>
+    </posts>
+</tumblr>

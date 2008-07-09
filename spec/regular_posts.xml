@@ -1,0 +1,33 @@
+<tumblr version="1.0">
+    <tumblelog name="mpayne" timezone="US/Eastern" title="Coding with headphones">
+        <feeds>
+            <feed id="235529" url="http://twitter.com/statuses/user_timeline/15119954.rss" import-type="regular-no-title" next-update-in-seconds="0" title="Twitter / mapayne" error-text="true"/>
+        </feeds>
+    </tumblelog>
+    <posts start="2" total="19" type="regular">
+        <post id="40555675" url="http://mpayne.tumblr.com/post/40555675" type="regular" date-gmt="2008-07-01 14:21:00 GMT" date="Tue, 01 Jul 2008 10:21:00" unix-timestamp="1214922060">
+            <regular-title>Revision to updating RubyGems</regular-title>
+            <regular-body>
+                <p>Ignore the post below. While it did upgrade to 1.2.0, unfortunately, nothing worked properly. Now I can&#8217;t seem to install anything and am receiving the following error: (Gem::RemoteFetcher::FetchError).</p>
+                <p>Screw this - reverting back to 1.1.1 for the time being.</p>
+            </regular-body>
+        </post>
+        <post id="40554720" url="http://mpayne.tumblr.com/post/40554720" type="regular" date-gmt="2008-07-01 14:12:56 GMT" date="Tue, 01 Jul 2008 10:12:56" unix-timestamp="1214921576">
+            <regular-title>Upgrading 10 RubyGems 1.2.0 on Ubuntu Hardy Heron</regular-title>
+            <regular-body>
+                <p>So doing a simple gem update &#8212;system did not work. Nothing to update. Still at RubyGems 1.1.1</p>
+                <p>Turns out the solution, after a bit of Googling, is:</p>
+                <p>
+                    <b>sudo gem install rubygems-update -v 1.1.1&#160;</b></p>
+                <p>and then do gem update &#8212;system</p>
+                <p>Hope that helps someone else.</p>
+            </regular-body>
+        </post>
+        <post id="40331319" url="http://mpayne.tumblr.com/post/40331319" type="regular" date-gmt="2008-06-29 21:18:41 GMT" date="Sun, 29 Jun 2008 17:18:41" unix-timestamp="1214774321">
+            <regular-title>Tumblr4Rails</regular-title>
+            <regular-body>
+I&#8217;m getting pretty close to being done writing my Tumblr4Rails plugin. So far it looks pretty good and will support Tumblr&#8217;s entire API. Just need to do some refactoring and spec enhancements.
+            </regular-body>
+        </post>
+    </posts>
+</tumblr>

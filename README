@@ -1,0 +1,116 @@
+Tumblr4Rails
+============
+
+Tumblr4Rails is a plugin that adds a method called 'tumblr' to any controller
+that calls 'use_tumblr' in it's class deinition.
+
+Tumblr4Rails allows a Rails application to make use of the Tumblr API
+http://www.tumblr.com/api
+
+Configuration
+=============
+
+Tumblr4Rails can be configured to 2 different modes:
+
+1) Application: The Tumblr email, password and log_name are all statically set
+   when the application starts. It is never necessary to provide these values to
+   the Tumblr methods calls. The obvious implication of this mode is that you can only access
+   the Tumblr account that you've specified.
+
+2) Request: The Tumblr email, password and log_name must be specified with each
+   request.
+
+*** The default configuration is request if no configuration is provided. ***
+
+To configure Tumblr4Rails, add a configure block to one of your environment files.
+
+Configuration Examples
+======================
+
+#development.rb
+
+Tumblr4Rails.configure do |settings|
+    settings.request_type = :application (could also be :request)
+    settings.email = "your tumblr email"
+    settings.password = "your tumblr password"
+    settings.read_url = "http://whatever.tumblr.com/api"
+    settings.write_url = "The url at tumblr to post to" (optional, defaults to: "http://www.tumblr.com/api/write")
+end
+
+Configuration Explanation
+=========================
+
+For :request
+    1) all that is required is setting the value of request_type to :request.
+    - its easier to not even create the configure block.
+    - setting any other values will result in an exception being thrown.
+
+For :application
+    1) request_type must be set to :application.
+    2) email must be set to your tumblr email.
+    3) password must be set to your tumblr password.
+    4) log_name must be set to the name of your tumblr log (ie: http://(log_name).tumblr.com/api)
+    - Setting any other value will result in an exception being thrown.
+
+The API (Consists of a Read API and a Write API)
+================================================
+
+On the controller: (if use_tumblr is called in the controller definition)
+
+1) Tumblr - returns an instance of the Tumblr4Rails::Tumblr class. This is the object
+   that will be mostly worked with. All methods are class methods.
+
+Throughout the application: Tumblr4Rails::Tumblr (You can also just include Tumblr4Rails)
+
+Read API
+========
+
+**Note that Tumblr will never return more than 50 posts. It will default to 20 if you
+don't specify a limit/num of greater than 20. You can ask for less by specifying a low limit/num**
+
+1) posts(options) - :id, :limit (alias for :num), :index (alias for :start), :type, :num, :start
+2) text_posts(options={}) - :limit (alias for :num), :index (alias for :start), :num, :start
+3) photo_posts(options={}) - :limit (alias for :num), :index (alias for :start), :num, :start
+4) quote_posts(options={}) - :limit (alias for :num), :index (alias for :start), :num, :start
+5) link_posts(options={}) - :limit (alias for :num), :index (alias for :start), :num, :start
+6) conversation_posts(options={}) - :limit (alias for :num), :index (alias for :start), :num, :start
+7) audio_posts(options={}) - :limit (alias for :num), :index (alias for :start), :num, :start
+8) video_posts(options={}) - :limit (alias for :num), :index (alias for :start), :num, :start
+9) all_posts(options={}) - :limit (alias for :num), :index (alias for :start), :num, :start
+10) get_by_id(id) - id = The post id.
+
+Each of the above methods returns an instance of Tumblr4Rails::Posts which can be treated as
+an array (it extends Array).
+
+The Tumblr4Rails::Posts class has the following properties:
+
+1) start - The index in the list of posts from which this group begins.
+2) total - The total number of the post type requested.
+3) post_type - The type of posts contained in the collection. 
+    (if all, this will be nil because the collection will be a mix of types)
+4) tumblelog - an object representing the tumblelog data
+        - feeds, name, timezone, title
+
+Post Classes
+============
+
+The following classes will be returned from a Tumblr read:
+
+Tumblr4Rails::AudioPost, Tumblr4Rails::ConversationPost, Tumblr4Rails::LinkPost, 
+Tumblr4Rails::PhotoPost, Tumblr4Rails::QuotePost, Tumblr4Rails::RegularPost, 
+Tumblr4Rails::VideoPost
+
+The base class for each of these is Tumblr4Rails::Post
+
+Each of these classes can be used to read data as well.
+
+For example:
+
+Tumblr4Rails::Post.get() will return all posts of any type starting from index 0
+limiting the results to 20.
+
+Tumblr4Rails::AudioPost.get(:limit => 2, :index => 1) will return a Tumblr4Rails::Posts collection
+containing 2 link posts (if there were 2) starting from index 1.
+ 
+
+Copyright (c) 2008 Matt Payne, released under the MIT license

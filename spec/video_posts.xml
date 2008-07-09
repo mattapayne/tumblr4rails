@@ -1,0 +1,30 @@
+<tumblr version="1.0">
+    <tumblelog name="mpayne" timezone="US/Eastern" title="Coding with headphones">
+        <feeds>
+            <feed id="235529" url="http://twitter.com/statuses/user_timeline/15119954.rss" import-type="regular-no-title" next-update-in-seconds="0" title="Twitter / mapayne" error-text="true"/>
+        </feeds>
+    </tumblelog>
+    <posts start="0" total="1" type="video">
+        <post id="39523155" url="http://mpayne.tumblr.com/post/39523155" type="video" date-gmt="2008-06-23 15:25:58 GMT" date="Mon, 23 Jun 2008 11:25:58" unix-timestamp="1214234758">
+            <video-caption>This is cool</video-caption>
+            <video-source>
+                <object width="425" height="344">
+                    <param name="movie" value="http://www.youtube.com/v/L4stQLiFO_I&hl=en">
+                    </param>
+                    <embed src="http://www.youtube.com/v/L4stQLiFO_I&hl=en" type="application/x-shockwave-flash" width="425" height="344">
+                    </embed>
+                </object>
+            </video-source>
+            <video-player>
+                <object width="400" height="336">
+                    <param name="movie" value="http://www.youtube.com/watch?v=L4stQLiFO_I">
+                    </param>
+                    <param name="wmode" value="transparent">
+                    </param>
+                    <embed src="http://www.youtube.com/v/L4stQLiFO_I" type="application/x-shockwave-flash" width="400" height="336" wmode="transparent">
+                    </embed>
+                </object>
+            </video-player>
+        </post>
+    </posts>
+</tumblr>

@@ -1,0 +1,21 @@
+<tumblr version="1.0">
+    <tumblelog name="mpayne" timezone="US/Eastern" title="Coding with headphones">
+        <feeds>
+            <feed id="235529" url="http://twitter.com/statuses/user_timeline/15119954.rss" import-type="regular-no-title" next-update-in-seconds="54" title="Twitter / mapayne" error-text="true"/>
+        </feeds>
+    </tumblelog>
+    <posts start="0" total="1" type="quote">
+        <post id="39092825" url="http://mpayne.tumblr.com/post/39092825" type="quote" date-gmt="2008-06-20 00:56:59 GMT" date="Thu, 19 Jun 2008 20:56:59" unix-timestamp="1213923419">
+            <quote-text>&#8220;
+                <p>&#8230; so if he is my gun and my gun kills him, then it&#8217;s suicide &#8230;</p>
+                <p>Just though it was funny.</p>&#8221;
+            </quote-text>
+            <quote-source>&mdash;
+                <a target="_blank" title="Source" href="http://www.harlancoben.com/static/novels/tfd.htm">
+                    <a href="http://www.harlancoben.com/static/novels/tfd.htm">http://www.harlancoben.com/static/novels/tfd.htm
+                    </a>
+                </a>
+            </quote-source>
+        </post>
+    </posts>
+</tumblr>

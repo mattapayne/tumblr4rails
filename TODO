@@ -1,0 +1,4 @@
+July 7, 2008
+
+1) Add 'session' based configuration in which we pull Tumblr information from the 'current user'
+2) Perhaps have Tumblr4Rails::Tumblr.create_xxx_post return a post object

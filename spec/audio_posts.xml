@@ -1,0 +1,16 @@
+<tumblr version="1.0">
+    <tumblelog name="mpayne" timezone="US/Eastern" title="Coding with headphones">
+        <feeds>
+            <feed id="235529" url="http://twitter.com/statuses/user_timeline/15119954.rss" import-type="regular-no-title" next-update-in-seconds="850" title="Twitter / mapayne" error-text="true"/>
+        </feeds>
+    </tumblelog>
+    <posts start="0" total="1" type="audio">
+        <post id="38841309" url="http://mpayne.tumblr.com/post/38841309" type="audio" date-gmt="2008-06-18 05:04:00 GMT" date="Wed, 18 Jun 2008 01:04:00" unix-timestamp="1213765440" audio-plays="2">
+            <audio-caption>Vasillios. The Disco Biscuits. For those of you that haven&#8217;t heard them &#8230;</audio-caption>
+            <audio-player>
+                <embed type="application/x-shockwave-flash" src="http://mpayne.tumblr.com/swf/audio_player.swf?audio_file=http://www.tumblr.com/audio_file/38841309/VxbA5N0Pdad0dxnoU1474hA0&color=FFFFFF" height="27" width="207" quality="best">
+                </embed>
+            </audio-player>
+        </post>
+    </posts>
+</tumblr>
