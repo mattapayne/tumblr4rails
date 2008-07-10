@@ -32,11 +32,7 @@ module Tumblr4Rails
       accessors = attr_accessors
       readonly = @readonly
       singleton_class.class_eval do
-        accessors.each do |a|
-          unless readonly
-            remove_method("#{a}=".to_sym)
-          end
-        end
+        accessors.each {|a| remove_method("#{a}=".to_sym) unless readonly }
       end
     end
     
@@ -62,7 +58,7 @@ module Tumblr4Rails
     end
     
     def map_attribute(attr)
-      return attr unless attribute_map.key?(attr)
+      return attr unless attribute_map && attribute_map.key?(attr)
       return attribute_map[attr]
     end
     
