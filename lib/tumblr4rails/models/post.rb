@@ -36,7 +36,6 @@ module Tumblr4Rails
         self.instance_variable_set(:@tumblr_id, response.new_id)
         remove_accessors
         self.instance_variable_set(:@readonly, true)
-        create_accessors
       end
     end
     

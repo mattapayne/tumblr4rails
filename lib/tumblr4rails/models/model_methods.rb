@@ -32,8 +32,7 @@ module Tumblr4Rails
       accessors = attr_accessors
       readonly = @readonly
       singleton_class.class_eval do
-        accessors.each do |a| 
-          remove_method(a)
+        accessors.each do |a|
           unless readonly
             remove_method("#{a}=".to_sym)
           end
