@@ -70,6 +70,12 @@ describe "Tumblr4Rails::Post" do
     @post.save!
   end
   
+  it "should not become frozen if the the save is unsuccessful" do
+    @post.stub!(:do_save!).and_return(mock_response("401"))
+    @post.should_not_receive(:freeze)
+    @post.save!
+  end
+  
   it "should include Tumblr4Rails::ModelMethods" do
     Tumblr4Rails::Post.included_modules.should be_include(Tumblr4Rails::ModelMethods)
   end

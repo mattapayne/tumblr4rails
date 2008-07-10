@@ -83,6 +83,8 @@ Read API
 **Note that Tumblr will never return more than 50 posts (at least at the time of writing). It will default to 20 if you
 don't specify a limit/num of greater than 20. You can ask for less by specifying a low limit/num**
 
+**Note that all objects returned from a read will be frozen so that they cannot be modified.**
+
 Read methods available on the Tumblr4Rails::Tumblr object (all are class methods):
 ==================================================================================
 
@@ -131,7 +133,7 @@ Tumblr4Rails::XXXPost (depending on the type of post it is).
 If JSON is requested, the results are returned as a string that can be eval'd and used in js. For an example of the
 format, see: http://www.tumblr.com/api
 
-Note that all Post objects contained within the Tumblr4Rails::Posts class are readonly. Tumblr does not provide
+Note that all Post objects contained within the Tumblr4Rails::Posts class are frozen since Tumblr does not provide
 for the ability to do updates.
 
 The Tumblr4Rails::Posts class has the following properties:
@@ -212,7 +214,7 @@ Write methods available on the Post objects (all are class methods):
 ===================================================================
 
 **Note - When a new post is created in this manner, if it is created successfully, it's tumblr_id will be set
-and it's accessors will all become readonly.**
+and it will be frozen.**
 
 1) save(additional_options={}) - returns true if the post was saved successfully, false otherwise
 2) save!(additional_options={}) - raises exceptions if there was a problem with the save
