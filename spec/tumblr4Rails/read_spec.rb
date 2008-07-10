@@ -25,20 +25,38 @@ describe Tumblr4Rails::Read do
     
     describe "get_by_id" do
       
+      def stubbed_response(response_body)
+        resp = mock("Response")
+        resp.stub!(:body).and_return(response_body)
+        self.gateway.stub!(:get).and_return(resp)
+      end
+      
       it "should return nil if id is blank" do
         self.get_by_id(nil).should be_nil
       end
       
       it "should return a Tumblr4Rails::Posts object if more than 1 post is returned" do
-        self.stub!(:posts).and_return(Tumblr4Rails::Posts.new(posts_hash))
-        self.get_by_id(1).should be_is_a(Tumblr4Rails::Posts)
+        stubbed_response(regular_posts_xml)
+        posts = self.get_by_id(4534, false, nil)
+        posts.should be_is_a(Tumblr4Rails::Posts)
       end
       
       it "should return a single post if only one post is found (which should be the usual)" do
-        self.stub!(:posts).and_return(Tumblr4Rails::Posts.new({:posts => [post_hash]}))
-        result = self.get_by_id(1)
-        result.should_not be_is_a(Tumblr4Rails::Posts)
-        result.should be_kind_of(Tumblr4Rails::Post)
+        stubbed_response(video_posts_xml)
+        post = self.get_by_id(343432, false, nil)
+        post.should be_is_a(Tumblr4Rails::Post)
+      end
+      
+      it "should return JSON if JSON was specified" do
+        stubbed_response(regular_posts_json)
+        post = self.get_by_id(343432, true, nil)
+        post.should be_is_a(String)
+      end
+      
+      it "should return JSON wrapped in the specified callback if JSON and a callback are specified" do
+        stubbed_response(regular_posts_json_callback)
+        post = self.get_by_id(343432, true, "myCallback")
+        post.should =~ /^myCallback(.*)$/
       end
       
     end

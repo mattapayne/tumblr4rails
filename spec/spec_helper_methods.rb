@@ -103,6 +103,14 @@ module SpecHelperMethods
   def link_posts_xml
     @link_posts ||= load_file("link_posts.xml")
   end
+  
+  def regular_posts_json
+    @reg_posts_json ||= load_file("regular_posts_json")
+  end
+  
+  def regular_posts_json_callback
+    @reg_posts_json_callback ||= load_file("regular_posts_json_callback")
+  end
 
   def load_file(name)
     file_name = File.join(File.dirname(__FILE__), name)

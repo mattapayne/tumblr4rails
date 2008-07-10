@@ -44,12 +44,8 @@ module Tumblr4Rails
       def get_by_id(id, json=false, callback=nil)
         return if id.blank?
         posts = posts(:id => id, :json => json, :callback => callback)
-        unless json
-          return posts.first if (posts && posts.size == 1)
-          return posts
-        else
-          return posts
-        end
+        return posts if (json || posts && posts.size > 1)
+        return posts.first
       end
       
       #Options:
