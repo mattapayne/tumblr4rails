@@ -54,12 +54,20 @@ module Tumblr4Rails
     def ensure_property(property_name, request_type, ensure_blank=false)
       property_name = property_name.to_sym unless property_name.is_a?(Symbol)
       value = self.send(property_name)
-      if ensure_blank && !value.blank?
+      if should_be_blank_but_is_not(ensure_blank, value)
         return "You cannot set #{property_name} when the request type is #{request_type}."
-      elsif !ensure_blank && value.blank?
+      elsif should_not_be_blank_but_is(ensure_blank, value)
         return "You must set #{property_name} when request type is #{request_type}."
       end
       return nil
+    end
+    
+    def should_be_blank_but_is_not(blank, value)
+      blank && !value.blank?
+    end
+    
+    def should_not_be_blank_but_is(blank, value)
+      !blank && value.blank?
     end
 
   end
