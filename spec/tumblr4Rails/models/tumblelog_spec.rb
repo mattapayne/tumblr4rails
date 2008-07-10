@@ -6,6 +6,11 @@ describe Tumblr4Rails::Tumblelog do
     Tumblr4Rails::Tumblelog.included_modules.should be_include(Tumblr4Rails::ModelMethods)
   end
   
+  it "should be readonly" do
+    log = Tumblr4Rails::Tumblelog.new
+    log.should be_readonly
+  end
+  
   describe "after_initialized" do
         
     it "should not proceed if the attributes hash is blank" do

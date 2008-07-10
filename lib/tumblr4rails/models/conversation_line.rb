@@ -6,6 +6,12 @@ module Tumblr4Rails
     
     attr_reader :name, :label, :content
     
+    private
+    
+    def after_initialized(attributes)
+      @readonly = true
+    end
+    
   end
   
 end

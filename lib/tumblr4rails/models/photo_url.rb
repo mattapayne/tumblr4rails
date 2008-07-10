@@ -6,6 +6,12 @@ module Tumblr4Rails
     
     attr_reader :max_width, :url
     
+    private
+    
+    def after_initialized(attributes)
+      @readonly = true
+    end
+    
   end
   
 end
