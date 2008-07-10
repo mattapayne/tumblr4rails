@@ -2,19 +2,15 @@ module Tumblr4Rails
   
   class RegularPost < Post
     
-    @@attr_map = {:regular_title => :title, :regular_body => :body}.freeze
+    attr_accessor :title, :body
     
-    @@attr_accessors = [:title, :body].freeze
+    @@attr_map = {:regular_title => :title, :regular_body => :body}.freeze
     
     def self.get(options={})
       Tumblr4Rails::Tumblr.regular_posts(options)
     end
     
     private
-    
-    def attr_accessors
-      @@attr_accessors
-    end
     
     def attribute_map
       @@attr_map

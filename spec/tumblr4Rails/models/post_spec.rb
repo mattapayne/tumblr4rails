@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
-describe Tumblr4Rails::Post do
+describe "Tumblr4Rails::Post" do
   
   def mock_response(code="201")
     resp = mock("Response")
@@ -57,10 +57,10 @@ describe Tumblr4Rails::Post do
     @post.save!
   end
   
-  it "should set the model to readonly and update its tumblr_id if the response code is 201" do
+  it "should update its tumblr_id and freeze itself if the response code is 201" do
     @post.stub!(:do_save!).and_return(mock_response)
-    @post.should_receive(:instance_variable_set).with(:@readonly, true)
     @post.should_receive(:instance_variable_set).with(:@tumblr_id, "553454")
+    @post.should_receive(:freeze)
     @post.save!
   end
   

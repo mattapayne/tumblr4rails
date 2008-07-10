@@ -23,7 +23,7 @@ module Tumblr4Rails
     end
     
     def save!(additional_params={})
-      raise Tumblr4Rails::ReadOnlyModelException.new("Cannot save a readonly model.") if readonly?
+      raise Tumblr4Rails::ReadOnlyModelException.new("Cannot save a readonly model.") if frozen?
       response = do_save!(additional_params)
       after_save(response)
       response
@@ -34,8 +34,7 @@ module Tumblr4Rails
     def after_save(response)
       if response.code.to_i == 201
         self.instance_variable_set(:@tumblr_id, response.new_id)
-        remove_accessors
-        self.instance_variable_set(:@readonly, true)
+        self.freeze
       end
     end
     

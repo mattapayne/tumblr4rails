@@ -5,7 +5,7 @@ describe Tumblr4Rails::ModelMethods do
   class TestPost
     
     include Tumblr4Rails::ModelMethods
-    @@attr_accessors = [:name, :age]
+    attr_accessor :name, :age
     attr_reader :phone, :fax, :nicknames
     @@attr_map = {:full_name => :name, :person_age => :age}
     
@@ -30,19 +30,19 @@ describe Tumblr4Rails::ModelMethods do
     
   end
   
-  it "should set the post to readonly = false if readonly does not exist in the hash of attributes" do
+  it "should not freeze itself if readonly does not exist in the hash of attributes" do
     post = TestPost.new({:full_name=>"matt"})
-    post.should_not be_readonly
+    post.should_not be_frozen
   end
   
-  it "should set the post to readonly = false if readonly exists in the hash of attributes and is false" do
+  it "should not be frozen if readonly exists in the hash of attributes and is false" do
     post = TestPost.new({:full_name=>"matt", :readonly=>false})
-    post.should_not be_readonly
+    post.should_not be_frozen
   end
   
-  it "should set the post to readonly if readonly is in the hash of attributes and is true" do
+  it "should be frozen if readonly is in the hash of attributes and is true" do
     post = TestPost.new({:full_name=>"matt", :readonly=>true})
-    post.should be_readonly
+    post.should be_frozen
   end
   
   describe "has?" do
@@ -95,41 +95,6 @@ describe Tumblr4Rails::ModelMethods do
       post.age.should == 12
     end
     
-  end
-  
-  describe "create_accessors" do
-    
-    it "should create only readers if the object is readonly" do
-      post = TestPost.new({:readonly=>true})
-      [:name, :age].each do |accessor|
-        post.should respond_to(accessor)
-        post.should_not respond_to("#{accessor}=".to_sym)
-      end
-    end
-    
-    it "should create readers and writers if the object is not readonly" do
-      post = TestPost.new
-      [:name, :age].each do |accessor|
-        post.should respond_to(accessor)
-        post.should respond_to("#{accessor}=".to_sym)
-      end
-    end
-    
-  end
-  
-  describe "remove_accessors" do
-    
-    it "should remove all setters" do
-      post = TestPost.new
-      [:name, :age].each do |accessor|
-        post.should respond_to(accessor)
-        post.should respond_to("#{accessor}=".to_sym)
-      end
-      post.send(:remove_accessors)
-      [:name, :age].each do |accessor|
-        post.should_not respond_to("#{accessor}=".to_sym)
-      end
-    end
   end
   
 end

@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
-describe Tumblr4Rails::PhotoPost do
+describe "Tumblr4Rails::PhotoPost" do
   
   before(:each) do
     @post = Tumblr4Rails::PhotoPost.new
@@ -37,13 +37,22 @@ describe Tumblr4Rails::PhotoPost do
     Tumblr4Rails::PhotoPost.get({:id => "12"})
   end
   
+  it "should freeze the collection of photo post urls even when new" do
+    @post.urls.should be_frozen
+  end
+  
   describe "after_initialized" do
     
     it "should not proceed if the attributes are blank" do
       opts = photo_urls_hash
       opts.should_receive(:blank?).at_least(1).times.and_return(true)
       post = Tumblr4Rails::PhotoPost.new(opts)
-      post.urls.should be_nil
+      post.urls.should == []
+    end
+    
+    it "should freeze the post urls after processing them" do
+      post = Tumblr4Rails::PhotoPost.new(photo_urls_hash)
+      post.urls.should be_frozen
     end
     
     it "should populate the urls collection if the attributes are not blank" do

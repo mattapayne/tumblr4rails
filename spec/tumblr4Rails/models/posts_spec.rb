@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
-describe Tumblr4Rails::Posts do
+describe "Tumblr4Rails::Posts" do
   
   before(:each) do
     @posts = Tumblr4Rails::Posts.new(posts_hash)
@@ -8,6 +8,10 @@ describe Tumblr4Rails::Posts do
   
   it "should include the Tumblr4Rails::ModelMethods module" do
     Tumblr4Rails::Posts.included_modules.should be_include(Tumblr4Rails::ModelMethods)
+  end
+  
+  it "should be frozen" do
+    @posts.should be_frozen
   end
   
   it "should create a tumblelog object if there is a tumblelog hash" do

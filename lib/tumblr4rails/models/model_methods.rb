@@ -3,50 +3,26 @@ module Tumblr4Rails
   module ModelMethods
   
     def initialize(attributes={})
-      set_readonly(attributes)
-      create_accessors
       initialize_attributes(attributes) unless attributes.blank?
       after_initialized(attributes)
-    end
-    
-    def readonly?
-      @readonly
+      if make_readonly?(attributes) || readonly?
+        self.freeze
+      end
     end
     
     private
     
-    def set_readonly(attributes)
-      @readonly = (attributes.blank? ? false : (attributes.delete(:readonly) || false))
+    def readonly?
+      frozen?
     end
     
-    def create_accessors
-      accessors = attr_accessors
-      readonly = @readonly
-      singleton_class.class_eval do
-        attr_reader(*accessors) if readonly
-        attr_accessor(*accessors) unless readonly
-      end
-    end
-    
-    def remove_accessors
-      accessors = attr_accessors
-      readonly = @readonly
-      singleton_class.class_eval do
-        accessors.each {|a| remove_method("#{a}=".to_sym) unless readonly }
-      end
+    def make_readonly?(attributes)
+      (attributes.blank? ? false : (attributes.delete(:readonly) || false))
     end
     
     def has?(attr, attributes, type=Array)
       return false if attributes.blank?
       attributes.key?(attr) && !attributes[attr].blank? && attributes[attr].is_a?(type)
-    end
-    
-    def singleton_class
-      class << self; self; end
-    end
-    
-    def attr_accessors
-      []
     end
     
     def attribute_map

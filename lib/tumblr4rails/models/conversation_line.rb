@@ -8,8 +8,8 @@ module Tumblr4Rails
     
     private
     
-    def after_initialized(attributes)
-      @readonly = true
+    def readonly?
+      true
     end
     
   end

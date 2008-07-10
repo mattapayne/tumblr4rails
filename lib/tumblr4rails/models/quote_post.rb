@@ -2,19 +2,15 @@ module Tumblr4Rails
   
   class QuotePost < Post
     
-    @@attr_map = {:quote_text => :quote, :quote_source => :source}.freeze
+    attr_accessor :quote, :source
     
-    @@attr_accessors = [:quote, :source].freeze
+    @@attr_map = {:quote_text => :quote, :quote_source => :source}.freeze
     
     def self.get(options={})
       Tumblr4Rails::Tumblr.quote_posts(options)
     end
     
     private
-    
-    def attr_accessors
-      @@attr_accessors
-    end
     
     def attribute_map
       @@attr_map

@@ -5,20 +5,15 @@ module Tumblr4Rails
     @@attr_map = {:link_text => :name, :link_url => :source_url, 
       :link_description => :description}.freeze
     
-    @@attr_accessors = [:source_url, :name, :description].freeze
-    
     attr_reader :bookmarklet
+    attr_accessor :source_url, :name, :description
     
     def self.get(options={})
       Tumblr4Rails::Tumblr.link_posts(options)
     end
     
     private
-    
-    def attr_accessors
-      @@attr_accessors
-    end
-    
+
     def attribute_map
       @@attr_map
     end

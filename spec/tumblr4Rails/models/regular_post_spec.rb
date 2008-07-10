@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
-describe Tumblr4Rails::RegularPost do
+describe "Tumblr4Rails::RegularPost" do
   
   before(:each) do
     @post = Tumblr4Rails::RegularPost.new

@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
-describe Tumblr4Rails::LinkPost do
+describe "Tumblr4Rails::LinkPost" do
   
   before(:each) do
     @post = Tumblr4Rails::LinkPost.new

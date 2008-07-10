@@ -8,11 +8,15 @@ module Tumblr4Rails
     
     private
     
+    def readonly?
+      true
+    end
+    
     def after_initialized(attributes)
-      @readonly = true
-      return if attributes.blank?
+      @feeds = []
       @feeds = attributes[:feeds].inject([]) {|arr, f| 
         arr << Tumblr4Rails::Feed.new(f); arr } if has?(:feeds, attributes)
+      @feeds.freeze
     end
     
   end
