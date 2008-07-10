@@ -117,4 +117,20 @@ describe Tumblr4Rails::ModelMethods do
     
   end
   
+  describe "remove_accessors" do
+    
+    it "should remove all accessors" do
+      post = TestPost.new
+      [:name, :age].each do |accessor|
+        post.should respond_to(accessor)
+        post.should respond_to("#{accessor}=".to_sym)
+      end
+      post.send(:remove_accessors)
+      [:name, :age].each do |accessor|
+        post.should_not respond_to(accessor)
+        post.should_not respond_to("#{accessor}=".to_sym)
+      end
+    end
+  end
+  
 end
