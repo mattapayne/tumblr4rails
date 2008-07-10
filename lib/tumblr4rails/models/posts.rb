@@ -9,6 +9,7 @@ module Tumblr4Rails
     private
     
     def after_initialized(attributes)
+      return if attributes.blank?
       @tumblelog = Tumblr4Rails::Tumblelog.new(attributes[:tumblelog]) if has?(:tumblelog, attributes, Hash)
       attributes[:posts].each {|p| 
         self << Tumblr4Rails::PostFactory.create_post(p)} if has?(:posts, attributes)
