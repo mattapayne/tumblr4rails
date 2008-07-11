@@ -31,7 +31,7 @@ module Tumblr4Rails
       unless Tumblr4Rails.configuration.upload_mime_types.blank?
          types.merge!(Tumblr4Rails.configuration.upload_mime_types)
       end
-      types[extension]
+      types[extension.downcase]
     end
     
   end
