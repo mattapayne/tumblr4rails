@@ -31,8 +31,8 @@ module Tumblr4Rails
     end
       
     module ReadMethods
-      include Tumblr4Rails::Converter
-      include Tumblr4Rails::ReadWriteCommon
+      include Tumblr4Rails::Converter, Tumblr4Rails::ReadWriteCommon,
+        Tumblr4Rails::PseudoDbc
       
       @@exclude_params_if_id = [:start, :num, :type].freeze
       @@params_to_remove_before_read = [:json, :read_url].freeze
@@ -133,8 +133,9 @@ module Tumblr4Rails
       end
       
       def ensure_read_url!(options)
-        raise ArgumentError.new("Could not determine Tumblr read url") unless read_url
-        options[:read_url] = read_url
+        pre_ensure("Could not determine Tumblr read_url" => (!read_url.blank?)) do
+          options[:read_url] = read_url
+        end
       end
       
       def read_number_range
