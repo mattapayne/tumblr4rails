@@ -11,7 +11,7 @@ module Tumblr4Rails
       ".png"=>"image/png",
       ".mp3"=>"audio/mpeg",
       ".xml"=>"application/xml"
-    }
+    }.freeze
     
     attr_reader :filename, :mime_type, :content
     
@@ -27,7 +27,7 @@ module Tumblr4Rails
     end
     
     def lookup_mime_type(extension)
-      types = @@default_mime_types
+      types = @@default_mime_types.dup
       unless Tumblr4Rails.configuration.upload_mime_types.blank?
          types.merge!(Tumblr4Rails.configuration.upload_mime_types)
       end
