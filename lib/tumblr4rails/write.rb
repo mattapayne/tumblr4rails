@@ -147,20 +147,22 @@ module Tumblr4Rails
       end
       
       def ensure_necessary_write_params_present!(options)
-        errors = []
-        errors << "The post type must be supplied." unless type_provided_and_valid?(options)
-        errors << "Proper credentials are required." unless credentials_provided?(options)
-        if type_provided?(options)
-          required = required_write_params_for_post(options[:type])
-          unless required.blank?
-            required.each do |param|
-              unless options.key?(param) && !options[param].blank?
-                errors << "#{param} is required to create a #{options[:type].to_s.humanize} post."
-              end
+        errors = ensure_type_and_credentials_present(options)
+        if required = required_write_params_for_post(options[:type])
+          required.each do |param|
+            unless options.key?(param) && !options[param].blank?
+              errors << "#{param} is required to create a #{options[:type].to_s.humanize} post."
             end
           end
         end
         raise ArgumentError.new("Could not create post:\n #{errors.to_sentence}") unless errors.empty?
+      end
+      
+      def ensure_type_and_credentials_present(options)
+        errors = []
+        errors << "The post type must be supplied." unless type_provided_and_valid?(options)
+        errors << "Proper credentials are required." unless credentials_provided?(options)
+        errors
       end
       
       def cleanup_write_params(options)
