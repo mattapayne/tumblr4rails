@@ -8,14 +8,14 @@ module Tumblr4Rails
     @@attr_map = {:photo_caption => :caption}.freeze
    
     def self.get(options={})
-      Tumblr4Rails::Tumblr.photo_posts(options)
+      Tumblr4Rails::TumblrReader.photo_posts(options)
     end
     
     private
 
     def do_save!(additional_params={})
       src = multipart? ? upload_data : source
-      Tumblr4Rails::Tumblr.create_photo_post(src, caption, click_through_url, additional_params)
+      Tumblr4Rails::TumblrWriter.create_photo_post(src, caption, click_through_url, additional_params)
     end
     
     def after_initialized(attributes)

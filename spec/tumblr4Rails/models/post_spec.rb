@@ -13,18 +13,18 @@ describe "Tumblr4Rails::Post" do
     @post = Tumblr4Rails::Post.new
   end
   
-  it "should delegate the work to the Tumblr4Rails::Tumblr class when get is called" do
-    Tumblr4Rails::Tumblr.should_receive(:all_posts)
+  it "should delegate the work to the Tumblr4Rails::TumblrReader class when get is called" do
+    Tumblr4Rails::TumblrReader.should_receive(:all_posts)
     Tumblr4Rails::Post.get
   end
   
-  it "should pass additional options to the Tumblr4Rails::Tumblr class when get is called" do
-    Tumblr4Rails::Tumblr.should_receive(:all_posts).with(hash_including({:num => "12"}))
+  it "should pass additional options to the Tumblr4Rails::TumblrReader class when get is called" do
+    Tumblr4Rails::TumblrReader.should_receive(:all_posts).with(hash_including({:num => "12"}))
     Tumblr4Rails::Post.get({:num => "12"})
   end
   
   it "should delegate the work to the Tumblr4Rails::Tumblr class when get_by_id is called" do
-    Tumblr4Rails::Tumblr.should_receive(:get_by_id).with(1, false, nil)
+    Tumblr4Rails::TumblrReader.should_receive(:get_by_id).with(1, false, nil)
     Tumblr4Rails::Post.get_by_id(1)
   end
   

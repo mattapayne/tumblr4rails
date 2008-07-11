@@ -7,11 +7,11 @@ module Tumblr4Rails
     attr_reader :tumblr_id, :post_type, :date_gmt, :date, :unix_timestamp, :url
     
     def self.get(options={})
-      Tumblr4Rails::Tumblr.all_posts(options)
+      Tumblr4Rails::TumblrReader.all_posts(options)
     end
     
     def self.get_by_id(id, json=false, callback=nil)
-      Tumblr4Rails::Tumblr.get_by_id(id, json, callback)
+      Tumblr4Rails::TumblrReader.get_by_id(id, json, callback)
     end
     
     def save(additional_params={})

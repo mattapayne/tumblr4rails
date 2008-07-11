@@ -9,13 +9,13 @@ module Tumblr4Rails
       :audio_player => :player}.freeze
     
     def self.get(options={})
-      Tumblr4Rails::Tumblr.audio_posts(options)
+      Tumblr4Rails::TumblrReader.audio_posts(options)
     end
     
     private
     
     def do_save!(additional_params={})
-      Tumblr4Rails::Tumblr.create_audio_post(upload_data, caption, additional_params)
+      Tumblr4Rails::TumblrWriter.create_audio_post(upload_data, caption, additional_params)
     end
     
     def attribute_map
