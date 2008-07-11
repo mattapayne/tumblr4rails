@@ -2,7 +2,7 @@ module Tumblr4Rails
 
   class Post
     
-    include Tumblr4Rails::ModelMethods
+    include Tumblr4Rails::ModelMethods, Tumblr4Rails::PseudoDbc
     
     attr_reader :tumblr_id, :post_type, :date_gmt, :date, :unix_timestamp, :url
     
@@ -23,10 +23,11 @@ module Tumblr4Rails
     end
     
     def save!(additional_params={})
-      raise Tumblr4Rails::ReadOnlyModelException.new("Cannot save a readonly model.") if frozen?
-      response = do_save!(additional_params)
-      after_save(response)
-      response
+      pre_ensure("You cannot save a previously saved model." => (!frozen?)) do
+        response = do_save!(additional_params)
+        after_save(response)
+        response
+      end
     end
     
     private

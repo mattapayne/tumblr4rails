@@ -53,7 +53,43 @@ module SpecHelperMethods
     {:conversation_lines => [conversation_hash, conversation_hash]}
   end
   
-  def create_mock_http_response
+  def create_do_write_action_hash
+    {:email => "test@test.ca", :password => "asdfasdas"}
+  end
+  
+  def create_mock_authenticated_response
+    mock_http_response = mock("Authenticated Response")
+    mock_http_response.stub!(:code).and_return("200")
+    mock_http_response.stub!(:message).and_return("OK")
+    mock_http_response.stub!(:body).and_return("") 
+    mock_http_response  
+  end
+  
+  def create_mock_audio_response
+    mock_http_response = mock("Audio Response")
+    mock_http_response.stub!(:code).and_return("200")
+    mock_http_response.stub!(:message).and_return("OK")
+    mock_http_response.stub!(:body).and_return("") 
+    mock_http_response  
+  end
+  
+  def create_mock_video_response
+    mock_http_response = mock("Video Response")
+    mock_http_response.stub!(:code).and_return("200")
+    mock_http_response.stub!(:message).and_return("OK")
+    mock_http_response.stub!(:body).and_return("454545") 
+    mock_http_response  
+  end
+  
+  def create_mock_write_response
+    mock_write_response = mock("Write Response")
+    mock_write_response.stub!(:code).and_return("210")
+    mock_write_response.stub!(:message).and_return("Created")
+    mock_write_response.stub!(:body).and_return("1234567") 
+    mock_write_response  
+  end
+  
+  def create_mock_read_response
     mock_http_response = mock("Response")
     mock_http_response.stub!(:code).and_return("200")
     mock_http_response.stub!(:message).and_return("OK")

@@ -70,7 +70,7 @@ module Tumblr4Rails
       private
       
       def get_response(options, json)
-        return gateway.get(generate_read_url(options, json))
+        return gateway.get_posts(generate_read_url(options, json))
       end
       
       #The XXX_provided? methods are handled by a method_missing in common.rb

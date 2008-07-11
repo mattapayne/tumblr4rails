@@ -4,9 +4,7 @@ describe "Tumblr4Rails::LinkPost" do
   
   before(:each) do
     @post = Tumblr4Rails::LinkPost.new
-    @resp = mock("Response")
-    @resp.stub!(:code).and_return("200")
-    @resp.stub!(:new_id).and_return("5435543")
+    @resp = create_mock_write_response
   end
   
   it "should delegate the work to the Tumblr4Rails::Tumblr class when save! is called" do

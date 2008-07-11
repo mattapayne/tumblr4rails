@@ -15,12 +15,12 @@ module Tumblr4Rails
     }.freeze
     
     @@post_type_optional_params = {
-      :photo => [:source, :data, :caption, :"click-through-url"],
+      :photo => [:source, :data, :caption, :"click-through-url", :filename],
       :quote => [:source],
       :link => [:name, :description],
       :conversation => [:title],
-      :video => [:embed, :data, :title, :caption],
-      :audio => [:data, :caption]
+      :video => [:embed, :data, :title, :caption, :filename],
+      :audio => [:data, :caption, :filename]
     }.freeze
     
     def initialize(name)

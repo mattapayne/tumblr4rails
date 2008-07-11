@@ -28,7 +28,7 @@ describe Tumblr4Rails::Read do
       def stubbed_response(response_body)
         resp = mock("Response")
         resp.stub!(:body).and_return(response_body)
-        self.gateway.stub!(:get).and_return(resp)
+        self.gateway.stub!(:get_posts).and_return(resp)
       end
       
       it "should return nil if id is blank" do
@@ -73,9 +73,9 @@ describe Tumblr4Rails::Read do
     
       before(:each) do
         configure_tumblr_for_application_requests
-        @resp = create_mock_http_response
+        @resp = create_mock_read_response
         @gateway = mock("Gateway")
-        @gateway.stub!(:get).and_return(@resp)
+        @gateway.stub!(:get_posts).and_return(@resp)
         self.stub!(:gateway).and_return(@gateway)
         @posts = mock("Posts")
         self.stub!(:convert_to_ostruct).and_return(@posts)
@@ -133,7 +133,7 @@ describe Tumblr4Rails::Read do
       end
     
       it "should use the gateway to do a get to the API" do
-        @gateway.should_receive(:get).and_return(@resp)
+        @gateway.should_receive(:get_posts).and_return(@resp)
         call_method(default_options)
       end
     

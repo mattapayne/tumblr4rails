@@ -17,7 +17,7 @@ module Tumblr4Rails
     #returned in plain text, 1 per line.
     module WriteMethods
       
-      include Tumblr4Rails::ReadWriteCommon
+      include Tumblr4Rails::ReadWriteCommon, Tumblr4Rails::PseudoDbc
       
       MAX_GENERATOR_LENGTH = 64
       DATE_FORMAT = "%m/%d/%Y %I:%M:%S"
@@ -33,7 +33,7 @@ module Tumblr4Rails
           return "0" if value.is_a?(FalseClass)
         }
       }.freeze
-      @@valid_do_write_action_params = [:email, :password, :action].freeze
+      @@valid_do_write_action_params = [:email, :password, :action, :write_url].freeze
       @@write_param_validations = {
         :email => lambda { |email| (email =~ RFC822::EmailAddress) != nil },
         :type => lambda { |type| Tumblr4Rails::PostType.post_type_names.include?(type) },
@@ -84,22 +84,43 @@ module Tumblr4Rails
             :name => name, :description => description}.reverse_merge(additional_options))
       end
       
-      def create_photo_post(source=nil, data=nil, caption=nil, additional_options={})
-        raise ArgumentError.new("Either source or data must be set.") if (source.blank? && data.blank?)
-        create_post({:type => :photo, :source => source, 
-            :caption => caption}.reverse_merge(additional_options))
+      def create_photo_post(src, caption=nil, click_through_url=nil, additional_options={})
+        pre_ensure("The src param is required." => (!src.blank?)) do
+          common_args = {
+            :type => :photo, :"click-through-url" => click_through_url,
+            :caption => caption
+          }.reverse_merge!(additional_options)
+          if src.is_a?(Tumblr4Rails::Upload)
+            common_args.merge!(:data => src, :multipart => true)
+          else
+            common_args.merge!(:source => src)
+          end
+          create_post(common_args)
+        end
       end
       
-      def create_audio_post(source=nil, data=nil, caption=nil, additional_options={})
-        raise ArgumentError.new("Either source or data must be set.") if (source.blank? && data.blank?)
-        create_post({:type => :audio, :source => source, :data => data, 
-            :caption => caption}.reverse_merge(additional_options))
+      def create_audio_post(src, caption=nil, additional_options={})
+        pre_ensure("The src param is required" => (!src.blank?)) do
+          pre_ensure("The data param must be an instance of Tumblr4Rails::Upload" => 
+              (src.is_a?(Tumblr4Rails::Upload))) do
+            create_post({:type => :audio, :data => src, :caption => caption, 
+                :multipart => true}.reverse_merge(additional_options))
+          end
+        end
       end
       
-      def create_video_post(embed=nil, data=nil, title=nil, caption=nil, additional_options={})
-        raise ArgumentError.new("Either embed or data must be set.") if (embed.blank? && data.blank?)
-        create_post({:type => :video, :embed => embed, :data => data, 
-            :title => title, :caption => caption}.reverse_merge(additional_options))
+      def create_video_post(src, title=nil, caption=nil, additional_options={})
+        pre_ensure("The src param is required" => (!src.blank?)) do
+          common_args = {
+            :type => :video, :title => title, 
+            :caption => caption}.reverse_merge!(additional_options)
+          if src.is_a?(Tumblr4Rails::Upload)
+            common_args.merge!(:data => src, :multipart => true)
+          else
+            common_args.merge!(:embed => src)
+          end
+          create_post(common_args)
+        end
       end
       
       #Note that the conversation should be separated by newlines
@@ -119,8 +140,9 @@ module Tumblr4Rails
       
       def create_post(options)
         raise ArgumentError.new("Post creation options cannot be blank.") if options.blank?
+        post_options = options.split_on!(:multipart)
         options = cleanup_write_params(options)
-        r = gateway.post(options.delete(:write_url), options)
+        r = gateway.post_new_post(options.delete(:write_url), options.merge(post_options))
         Tumblr4Rails::PostCreationResponse.new(r.code, r.message, r.body)
       end
       
@@ -133,7 +155,7 @@ module Tumblr4Rails
           unless required.blank?
             required.each do |param|
               unless options.key?(param) && !options[param].blank?
-                errors << "#{param} is required to create a #{options[:type]} post."
+                errors << "#{param} is required to create a #{options[:type].to_s.humanize} post."
               end
             end
           end
@@ -171,7 +193,7 @@ module Tumblr4Rails
         options.each do |key, value|
           if write_param_validations.key?(key)
             unless write_param_validations[key].call(value)
-              raise ArgumentError.new("Invalid value #{value} for param #{key}.")
+              raise ArgumentError.new("Invalid value '#{value}' for param #{key.to_s.humanize}.")
             end
           end
         end
@@ -198,7 +220,7 @@ module Tumblr4Rails
       end
       
       def get_do_write_action_response(options)
-        gateway.post(options.delete(:write_url), options)
+        gateway.execute_query(options.delete(:write_url), options)
       end
       
       def remove_invalid_or_blank_do_write_action_params!(options)
@@ -206,18 +228,21 @@ module Tumblr4Rails
       end
       
       def extract_email
-        raise ArgumentError.new("Cannot determine Tumblr email") if email.blank?
-        return email
+        pre_ensure("Cannot determine Tumblr email" => (!email.blank?)) do
+          return email
+        end
       end
       
       def extract_password
-        raise ArgumentError.new("Cannot determine Tumblr password") if password.blank?
-        return password
+        pre_ensure("Cannot determine Tumblr password" => (!password.blank?)) do
+          return password
+        end
       end
       
       def extract_write_url
-        raise ArgumentError.new("Cannot determine Tumblr write url") if write_url.blank?
-        return write_url
+        pre_ensure("Cannot determine Tumblr write url" => (!write_url.blank?)) do
+          return write_url
+        end
       end
       
       def write_param_validations

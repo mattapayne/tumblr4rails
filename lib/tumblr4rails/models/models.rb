@@ -1,7 +1,6 @@
 $:.unshift(File.dirname(__FILE__)) unless $:.include?(File.dirname(__FILE__)) ||
   $:.include?(File.expand_path(File.dirname(__FILE__)))
 
-require 'read_only_model_exception'
 require 'model_methods'
 require 'photo_url'
 require 'conversation_line'

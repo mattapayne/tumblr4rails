@@ -33,6 +33,11 @@ describe Tumblr4Rails::Config do
     @conf.write_url.should == Tumblr4Rails::Config::DEFAULT_WRITE_URL
   end
   
+  it "should have an empty hash for mime types" do
+    @conf.upload_mime_types.should_not be_nil
+    @conf.upload_mime_types.should be_is_a(Hash)
+  end
+  
   describe "valid?" do
     
     it "should call validate_for_request when request_type is :request" do

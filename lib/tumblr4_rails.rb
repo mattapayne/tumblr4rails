@@ -18,6 +18,12 @@ class Hash
       self[k.to_s.underscore] = value
     end
   end
+  
+  def split_on!(*keys)
+    h = {}
+    keys.flatten.each { |k| h[k] = delete(k) if key?(k)}
+    h
+  end
     
 end
 
@@ -26,6 +32,8 @@ $:.include?(File.dirname(__FILE__) + "/tumblr4rails") ||
   $:.include?(File.expand_path(File.dirname(__FILE__) + "/tumblr4rails"))
 
 require 'version'
+require 'pseudo_dbc'
+require 'upload'
 require 'models/models'
 require 'post_creation_response'
 require 'post_type'
@@ -35,8 +43,9 @@ require 'request_type'
 require 'tag_handlers'
 require 'posts_listener'
 require 'converter'
-require 'errors'
 require 'config'
+require 'multipart_http'
+require 'http'
 require 'http_gateway'
 require 'read_write_common'
 require 'read'
