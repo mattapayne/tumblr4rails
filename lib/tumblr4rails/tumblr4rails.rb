@@ -1,9 +1,5 @@
 module Tumblr4Rails
   
-  def self.included(klazz)
-    klazz.extend(ClassMethods)
-  end
-  
   def self.configure(&block)
     @@tumblr_config = nil
     raise ArgumentError.new("A block is required.") unless block_given?
@@ -26,11 +22,30 @@ module Tumblr4Rails
   def self.configuration
     @@tumblr_config ||= Tumblr4Rails::Config.new
   end
-
-  module ClassMethods
-
-    def use_tumblr
-      include Tumblr4Rails
+  
+  module ControllerMethods
+    
+    def self.included(klazz)
+      klazz.extend(ClassMethods)
+    end
+    
+    module ClassMethods
+      
+      private
+      
+      def use_tumblr
+        include InstanceMethods
+      end
+      
+    end
+    
+    module InstanceMethods
+      
+      private
+      
+      def tumblr
+        Tumblr4Rails::Tumblr
+      end
     end
     
   end

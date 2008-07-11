@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Tumblr4Rails do
-  include Tumblr4Rails
+  include Tumblr4Rails::ControllerMethods
   
   describe "the module itself" do
     
@@ -124,21 +124,13 @@ describe Tumblr4Rails do
     end
     
   end
-  
-  describe "including the module" do
-    
-    it "should provide a class method called use_tumblr" do
-      self.class.should respond_to(:use_tumblr)
-    end
-    
-  end
-  
+ 
   describe "after telling it to use_tumblr" do
     
     use_tumblr
     
-    it "have Tumblr4Rails included" do
-      self.class.included_modules.should be_include(Tumblr4Rails)
+    it "have Tumblr4Rails::ControllerMethods::InstanceMethods included" do
+      self.class.included_modules.should be_include(Tumblr4Rails::ControllerMethods::InstanceMethods)
     end
     
   end
