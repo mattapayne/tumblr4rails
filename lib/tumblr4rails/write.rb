@@ -139,11 +139,12 @@ module Tumblr4Rails
       private
       
       def create_post(options)
-        raise ArgumentError.new("Post creation options cannot be blank.") if options.blank?
-        post_options = options.split_on!(:multipart)
-        options = cleanup_write_params(options)
-        r = gateway.post_new_post(options.delete(:write_url), options.merge(post_options))
-        Tumblr4Rails::PostCreationResponse.new(r.code, r.message, r.body)
+        pre_ensure("Post creation options cannot be blank." => (!options.blank?)) do
+          post_options = options.split_on!(:multipart)
+          options = cleanup_write_params(options)
+          r = gateway.post_new_post(options.delete(:write_url), options.merge(post_options))
+          Tumblr4Rails::PostCreationResponse.new(r.code, r.message, r.body)
+        end
       end
       
       def ensure_necessary_write_params_present!(options)
