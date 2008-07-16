@@ -105,7 +105,7 @@ module Tumblr4Rails
       options = options.symbolize_keys
       get_credentials!(options) unless credentials_provided?(options)
       get_write_url!(options) unless write_url_provided?(options)
-      get_handler(options[:action], options).process!
+      options = get_handler(options[:action], options).process!
       gateway.execute_query(options.delete(:write_url), options)
     end
       
