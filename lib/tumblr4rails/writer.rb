@@ -105,7 +105,7 @@ module Tumblr4Rails
       options = options.symbolize_keys
       get_credentials!(options) unless credentials_provided?(options)
       get_write_url!(options) unless write_url_provided?(options)
-      options = Tumblr4Rails::WriteOptions::Factory.handler_for(options[:action], options).process!
+      get_handler(options[:action], options).process!
       gateway.execute_query(options.delete(:write_url), options)
     end
       
@@ -113,7 +113,11 @@ module Tumblr4Rails
       options = options.symbolize_keys
       get_credentials!(options) unless credentials_provided?(options)
       get_write_url!(options) unless write_url_provided?(options)
-      Tumblr4Rails::WriteOptions::Factory.handler_for(options[:type], options).process!
+      get_handler(options[:type], options).process!
+    end
+    
+    def self.get_handler(type, options)
+      Tumblr4Rails::WriteOptions::Factory.handler_for(type, options)
     end
       
     def self.get_credentials!(options)
