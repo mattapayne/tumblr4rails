@@ -9,30 +9,30 @@ describe "Tumblr4Rails::QuotePost" do
     @resp.stub!(:new_id).and_return("5435543")
   end
   
-  it "should delegate the work to the Tumblr4Rails::Tumblr class when save! is called" do
-    Tumblr4Rails::TumblrWriter.should_receive(:create_quote_post).and_return(@resp)
+  it "should delegate the work to the Tumblr4Rails::Write class when save! is called" do
+    Tumblr4Rails::Writer.should_receive(:create_quote_post).and_return(@resp)
     @post.save!
   end
   
   it "should pass in the correct values when save! is called" do
-    Tumblr4Rails::TumblrWriter.should_receive(:create_quote_post).
+    Tumblr4Rails::Writer.should_receive(:create_quote_post).
       with(@post.quote, @post.source, {}).and_return(@resp)
     @post.save!
   end
   
   it "should pass in the correct values and additional values when save! is called" do
-    Tumblr4Rails::TumblrWriter.should_receive(:create_quote_post).
+    Tumblr4Rails::Writer.should_receive(:create_quote_post).
       with(@post.quote, @post.source, hash_including({:test => "1"})).and_return(@resp)
     @post.save!(:test => "1")
   end
   
-  it "should delegate the work to the Tumblr4Rails::TumblrReader class when get is called" do
-    Tumblr4Rails::TumblrReader.should_receive(:quote_posts)
+  it "should delegate the work to the Tumblr4Rails::Reader class when get is called" do
+    Tumblr4Rails::Reader.should_receive(:quote_posts)
     Tumblr4Rails::QuotePost.get
   end
   
-  it "should pass additional options to the Tumblr4Rails::TumblrReader class when get is called" do
-    Tumblr4Rails::TumblrReader.should_receive(:quote_posts).with(hash_including({:id => "12"}))
+  it "should pass additional options to the Tumblr4Rails::Reader class when get is called" do
+    Tumblr4Rails::Reader.should_receive(:quote_posts).with(hash_including({:id => "12"}))
     Tumblr4Rails::QuotePost.get({:id => "12"})
   end
   

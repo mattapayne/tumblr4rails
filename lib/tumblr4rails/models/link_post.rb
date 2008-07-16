@@ -9,7 +9,7 @@ module Tumblr4Rails
     attr_accessor :source_url, :name, :description
     
     def self.get(options={})
-      Tumblr4Rails::TumblrReader.link_posts(options)
+      Tumblr4Rails::Reader.link_posts(options)
     end
     
     private
@@ -19,7 +19,7 @@ module Tumblr4Rails
     end
     
     def do_save!(additional_params={})
-      Tumblr4Rails::TumblrWriter.create_link_post(source_url, name, description, additional_params)
+      Tumblr4Rails::Writer.create_link_post(source_url, name, description, additional_params)
     end
     
   end

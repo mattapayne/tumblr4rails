@@ -23,7 +23,7 @@ module Tumblr4Rails
     private
     
     def get_mime_type
-      lookup_mime_type(File.extname(@filename))
+      lookup_mime_type(File.extname(@filename)) unless @filename.blank?
     end
     
     def lookup_mime_type(extension)

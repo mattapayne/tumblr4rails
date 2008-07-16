@@ -4,13 +4,13 @@ describe "Tumblr4Rails::AudioPost" do
   
   describe "get" do
     
-    it "should delegate the work to the Tumblr4Rails::TumblrReader class when get is called" do
-      Tumblr4Rails::TumblrReader.should_receive(:audio_posts)
+    it "should delegate the work to the Tumblr4Rails::Reader class when get is called" do
+      Tumblr4Rails::Reader.should_receive(:audio_posts)
       Tumblr4Rails::AudioPost.get
     end
   
-    it "should pass additional options to the Tumblr4Rails::TumblrReader class when get is called" do
-      Tumblr4Rails::TumblrReader.should_receive(:audio_posts).with(hash_including({:id => "12"}))
+    it "should pass additional options to the Tumblr4Rails::Reader class when get is called" do
+      Tumblr4Rails::Reader.should_receive(:audio_posts).with(hash_including({:id => "12"}))
       Tumblr4Rails::AudioPost.get({:id => "12"})
     end
 
@@ -43,16 +43,16 @@ describe "Tumblr4Rails::AudioPost" do
       }.should raise_error
     end
     
-    it "should delegate the save to the Tumblr4Rails::TumblrWriter class" do
+    it "should delegate the save to the Tumblr4Rails::Writer class" do
       upload = get_upload
-      Tumblr4Rails::TumblrWriter.should_receive(:create_audio_post).
+      Tumblr4Rails::Writer.should_receive(:create_audio_post).
         with(upload, @post.caption, {}).and_return(@resp)
       @post.save!
     end
     
     it "should include any provided optional params" do
       upload = get_upload
-      Tumblr4Rails::TumblrWriter.should_receive(:create_audio_post).
+      Tumblr4Rails::Writer.should_receive(:create_audio_post).
         with(upload, @post.caption, hash_including(:generator => "Test")).and_return(@resp)
       @post.save!(:generator => "Test")
     end

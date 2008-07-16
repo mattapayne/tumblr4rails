@@ -44,12 +44,13 @@ module Tumblr4Rails
       private
       
       def tumblr_reader
-        Tumblr4Rails::TumblrReader
+        Tumblr4Rails::Reader
       end
       
       def tumblr_writer
-        Tumblr4Rails::TumblrWriter
+        Tumblr4Rails::Writer
       end
+      
     end
     
   end

@@ -7,7 +7,7 @@ module Tumblr4Rails
     @@attr_map = {:quote_text => :quote, :quote_source => :source}.freeze
     
     def self.get(options={})
-      Tumblr4Rails::TumblrReader.quote_posts(options)
+      Tumblr4Rails::Reader.quote_posts(options)
     end
     
     private
@@ -17,7 +17,7 @@ module Tumblr4Rails
     end
     
     def do_save!(additional_params={})
-      Tumblr4Rails::TumblrWriter.create_quote_post(quote, source, additional_params)
+      Tumblr4Rails::Writer.create_quote_post(quote, source, additional_params)
     end
     
   end
