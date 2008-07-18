@@ -4,8 +4,6 @@ module Tumblr4Rails
     
     class WriteHandler
       
-      include Tumblr4Rails::ProvidedMethods
-      
       MAX_GENERATOR_LENGTH = 64
       DATE_FORMAT = "%m/%d/%Y %I:%M:%S"
       HTML = "html"
@@ -175,6 +173,15 @@ module Tumblr4Rails
       
       def all_required_params
         @all_req ||= (common_required_params + post_specific_required_params).uniq
+      end
+      
+      def method_missing(method_name, *args)
+        if method_name.to_s =~ /.+_provided?/
+          thing = method_name.to_s.slice(0...(method_name.to_s.index("_provided?")))
+          return options.key?(thing.to_sym) && !options[thing.to_sym].blank?
+        else
+          super
+        end
       end
       
     end

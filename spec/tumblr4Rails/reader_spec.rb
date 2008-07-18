@@ -122,9 +122,9 @@ describe Tumblr4Rails::Reader do
     end
     
     it "should generate a url with the correct parameters" do
-      options = {:type => :regular, :read_url => "http://www.something.something.com"}
+      options = {:type => :regular, :limit => 2, :read_url => "http://www.something.something.com"}
       url = call_method(options, false)
-      url.should == "http://www.something.something.com?type=regular"
+      url.should == "http://www.something.something.com?limit=2&type=regular"
     end
     
   end

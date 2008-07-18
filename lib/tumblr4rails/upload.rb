@@ -10,7 +10,14 @@ module Tumblr4Rails
       ".bmp"=>"image/bmp",
       ".png"=>"image/png",
       ".mp3"=>"audio/mpeg",
-      ".xml"=>"application/xml"
+      ".xml"=>"application/xml",
+      ".dvi" => "application/x-dvi",
+      ".mp2" => "video/mpeg",
+      ".mpa" => "video/mpeg",
+      ".mpe" => "video/mpeg",
+      ".mpeg" => "video/mpeg",
+      ".qt" => "video/quicktime",
+      ".mov" => "video/quicktime"
     }.freeze
     
     attr_reader :filename, :mime_type, :content
@@ -29,7 +36,7 @@ module Tumblr4Rails
     def lookup_mime_type(extension)
       types = @@default_mime_types.dup
       unless Tumblr4Rails.configuration.upload_mime_types.blank?
-         types.merge!(Tumblr4Rails.configuration.upload_mime_types)
+        types.merge!(Tumblr4Rails.configuration.upload_mime_types)
       end
       types[extension.downcase]
     end

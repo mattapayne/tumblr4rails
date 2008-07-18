@@ -4,8 +4,6 @@ module Tumblr4Rails
     
     class ReadHandler
       
-      include Tumblr4Rails::ProvidedMethods
-      
       @@aliases = {:limit => :num, :index => :start}.freeze
       @@possible_params = [:id, :type, :num, :start, :limit, :index, :callback, 
         :read_url, :json].freeze
@@ -72,6 +70,15 @@ module Tumblr4Rails
       
       def params_to_remove_if_id_present
         @@remove_if_id_present
+      end
+      
+      def method_missing(method_name, *args)
+        if method_name.to_s =~ /.+_provided?/
+          thing = method_name.to_s.slice(0...(method_name.to_s.index("_provided?")))
+          return options.key?(thing.to_sym) && !options[thing.to_sym].blank?
+        else
+          super
+        end
       end
       
     end
