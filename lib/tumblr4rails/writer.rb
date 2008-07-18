@@ -97,7 +97,7 @@ module Tumblr4Rails
       options = cleanup_post_params(options)
       r = gateway.post_new_post(options.delete(:write_url), 
         options.merge(:multipart => multipart))
-      Tumblr4Rails::CreatedResponse.new(r.code, r.message, r.body)
+      Tumblr4Rails::Response.new(r.code, r.message, r.body)
     end
       
     #handles the "Other Actions" of the API

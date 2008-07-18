@@ -1,6 +1,6 @@
 module Tumblr4Rails
   
-  class CreatedResponse
+  class Response
     
     attr_reader :code, :message, :new_id
     
