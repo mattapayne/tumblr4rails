@@ -278,7 +278,7 @@ click_through_url = params[:click_through_url]
 data = params[:upload_data]
 filename = data.original_filename
 
-Using the objectm model:
+Using the object model:
 ========================
 
 photo_post = Tumblr4Rails::PhotoPost.new(:filename => filename, :data => data.read,
