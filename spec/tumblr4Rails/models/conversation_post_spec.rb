@@ -7,31 +7,31 @@ describe "Tumblr4Rails::ConversationPost" do
     @resp = create_mock_write_response
   end
   
-  it "should delegate the work to the Tumblr4Rails::Writer class when save! is called" do
-    Tumblr4Rails::Writer.should_receive(:create_conversation_post).and_return(@resp)
+  it "should delegate the work to the Tumblr4Rails::Tumblr class when save! is called" do
+    Tumblr4Rails::Tumblr.should_receive(:create_conversation_post).and_return(@resp)
     @post.save!
   end
   
-  it "should pass in the correct values to Tumblr4Rails::Writer when save! is called" do
-    Tumblr4Rails::Writer.should_receive(:create_conversation_post).
+  it "should pass in the correct values to Tumblr4Rails::Tumblr when save! is called" do
+    Tumblr4Rails::Tumblr.should_receive(:create_conversation_post).
       with(@post.conversation, @post.title, {}).and_return(@resp)
     @post.save!
   end
   
-  it "should pass in the correct values and additional values to Tumblr4Rails::Writer when save! is called" do
-    Tumblr4Rails::Writer.should_receive(:create_conversation_post).
+  it "should pass in the correct values and additional values to Tumblr4Rails::Tumblr when save! is called" do
+    Tumblr4Rails::Tumblr.should_receive(:create_conversation_post).
       with(@post.conversation, @post.title, 
       hash_including({:generator => "test"})).and_return(@resp)
     @post.save!(:generator => "test")
   end
   
-  it "should delegate the work to the Tumblr4Rails::Reader class when get is called" do
-    Tumblr4Rails::Reader.should_receive(:conversation_posts)
+  it "should delegate the work to the Tumblr4Rails::Tumblr class when get is called" do
+    Tumblr4Rails::Tumblr.should_receive(:conversation_posts)
     Tumblr4Rails::ConversationPost.get
   end
   
-  it "should pass additional options to the Tumblr4Rails::Reader class when get is called" do
-    Tumblr4Rails::Reader.should_receive(:conversation_posts).with(hash_including({:id => "12"}))
+  it "should pass additional options to the Tumblr4Rails::Tumblr class when get is called" do
+    Tumblr4Rails::Tumblr.should_receive(:conversation_posts).with(hash_including({:id => "12"}))
     Tumblr4Rails::ConversationPost.get({:id => "12"})
   end
   

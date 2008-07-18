@@ -2,9 +2,14 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Tumblr4Rails::Writer do
   
+  class TestWriter
+    include Tumblr4Rails::Writer
+  end
+  
   before(:each) do
+    @writer = TestWriter.new
     @gateway = mock("Gateway")
-    Tumblr4Rails::Writer.stub!(:gateway).and_return(@gateway)
+    @writer.stub!(:gateway).and_return(@gateway)
   end
   
   describe "queries" do
@@ -19,17 +24,17 @@ describe Tumblr4Rails::Writer do
       it "should merge in :action => 'check-audio'" do
         mock_hash = create_do_write_action_hash
         mock_hash.should_receive(:merge).with(:action => "check-audio")
-        Tumblr4Rails::Writer.stub!(:do_query).and_return(@resp)
-        Tumblr4Rails::Writer.can_upload_audio?(mock_hash)
+        @writer.stub!(:do_query).and_return(@resp)
+        @writer.can_upload_audio?(mock_hash)
       end
     
       it "should return true if the response code is 200" do
-        Tumblr4Rails::Writer.can_upload_audio?(:email => "test@test.ca", :password => "dfsdf").should be_true
+        @writer.can_upload_audio?(:email => "test@test.ca", :password => "dfsdf").should be_true
       end
     
       it "should return false if the response code is not 200" do
         @resp.stub!(:code).and_return("400")
-        Tumblr4Rails::Writer.can_upload_audio?(:email => "test@test.ca", :password => "dfsdf").should be_false
+        @writer.can_upload_audio?(:email => "test@test.ca", :password => "dfsdf").should be_false
       end
     
     end
@@ -44,12 +49,12 @@ describe Tumblr4Rails::Writer do
       it "should merge in :action => 'check-vimeo'" do
         mock_hash = create_do_write_action_hash
         mock_hash.should_receive(:merge).with(:action => "check-vimeo")
-        Tumblr4Rails::Writer.stub!(:do_query).and_return(@resp)
-        Tumblr4Rails::Writer.video_upload_permissions(mock_hash)
+        @writer.stub!(:do_query).and_return(@resp)
+        @writer.video_upload_permissions(mock_hash)
       end
     
       it "should return an instance of Tumblr4Rails::UploadPermission" do
-        resp = Tumblr4Rails::Writer.video_upload_permissions(:email => "test@test.ca", :password => "sdsddff")
+        resp = @writer.video_upload_permissions(:email => "test@test.ca", :password => "sdsddff")
         resp.should be_is_a(Tumblr4Rails::UploadPermission)
       end
     
@@ -65,17 +70,17 @@ describe Tumblr4Rails::Writer do
       it "it should merge in :action => :authenticate" do
         mock_hash = create_do_write_action_hash
         mock_hash.should_receive(:merge).with(:action => :authenticate)
-        Tumblr4Rails::Writer.stub!(:do_query).and_return(@resp)
-        Tumblr4Rails::Writer.authenticated?(mock_hash)
+        @writer.stub!(:do_query).and_return(@resp)
+        @writer.authenticated?(mock_hash)
       end
     
       it "should return true if the response code is 200" do
-        Tumblr4Rails::Writer.authenticated?({:email => "test@test.ca", :password => "xxx"}).should be_true
+        @writer.authenticated?({:email => "test@test.ca", :password => "xxx"}).should be_true
       end
     
       it "should return false if the response code is not 200" do
         @resp.stub!(:code).and_return("400")
-        Tumblr4Rails::Writer.authenticated?({:email => "test@test.ca", :password => "xxx"}).should be_false
+        @writer.authenticated?({:email => "test@test.ca", :password => "xxx"}).should be_false
       end
     
     end
@@ -89,30 +94,30 @@ describe Tumblr4Rails::Writer do
       end
     
       it "should be authenticated if the email and password are provided" do
-        Tumblr4Rails::Writer.authenticated?({:password => "xxx", :email => "test@test.ca"}).should be_true
+        @writer.authenticated?({:password => "xxx", :email => "test@test.ca"}).should be_true
       end
     
       it "should raise an exception if the email is not passed in" do
         lambda {
-          Tumblr4Rails::Writer.authenticated?({:password => "xxx"}).should be_false
+          @writer.authenticated?({:password => "xxx"}).should be_false
         }.should raise_error
       end
     
       it "should raise an exception if the email passed in is blank" do
         lambda {
-          Tumblr4Rails::Writer.authenticated?({:email => nil, :password => "xxx"}).should be_false
+          @writer.authenticated?({:email => nil, :password => "xxx"}).should be_false
         }.should raise_error
       end
     
       it "should raise an exception if the passowrd is not passed in" do
         lambda {
-          Tumblr4Rails::Writer.authenticated?({:email => "test@test.ca"}).should be_false
+          @writer.authenticated?({:email => "test@test.ca"}).should be_false
         }.should raise_error
       end
     
       it "should raise an exception if the password passed in is blank" do
         lambda {
-          Tumblr4Rails::Writer.authenticated?({:email => "test@test.ca", :password => nil}).should be_false
+          @writer.authenticated?({:email => "test@test.ca", :password => nil}).should be_false
         }.should raise_error
       end
     
@@ -127,34 +132,34 @@ describe Tumblr4Rails::Writer do
       end
     
       it "should be authenticated if email and password are set" do
-        Tumblr4Rails::Writer.authenticated?.should be_true
+        @writer.authenticated?.should be_true
       end
    
       it "should raise an exception if the email is nil" do
-        Tumblr4Rails::Writer.stub!(:email).and_return(nil)
+        @writer.stub!(:email).and_return(nil)
         lambda{
-          Tumblr4Rails::Writer.authenticated?
+          @writer.authenticated?
         }.should raise_error
       end
     
       it "should raise an exception if the email is blank" do
-        Tumblr4Rails::Writer.stub!(:email).and_return("")
+        @writer.stub!(:email).and_return("")
         lambda {
-          Tumblr4Rails::Writer.authenticated?
+          @writer.authenticated?
         }.should raise_error
       end
     
       it "should raise an exception if the password is nil" do
-        Tumblr4Rails::Writer.stub!(:password).and_return(nil)
+        @writer.stub!(:password).and_return(nil)
         lambda{
-          Tumblr4Rails::Writer.authenticated?
+          @writer.authenticated?
         }.should raise_error
       end
     
       it "should raise an exception if the password is blank" do
-        Tumblr4Rails::Writer.stub!(:password).and_return("")
+        @writer.stub!(:password).and_return("")
         lambda {
-          Tumblr4Rails::Writer.authenticated?
+          @writer.authenticated?
         }.should raise_error
       end
     
@@ -172,15 +177,15 @@ describe Tumblr4Rails::Writer do
     describe "create regular post" do
     
       it "should receive args with the proper contents" do
-        Tumblr4Rails::Writer.should_receive(:create_post).with(
+        @writer.should_receive(:create_post).with(
           hash_including(:type => :regular, :title => "Title", :body => "Body"))
-        Tumblr4Rails::Writer.create_regular_post("Title", "Body")
+        @writer.create_regular_post("Title", "Body")
       end
     
       it "should receive args with additional arguments included" do
-        Tumblr4Rails::Writer.should_receive(:create_post).with(
+        @writer.should_receive(:create_post).with(
           hash_including(:generator => "Test", :private => "1"))
-        Tumblr4Rails::Writer.create_regular_post("Title", "Body", {:generator => "Test", :private => "1"})
+        @writer.create_regular_post("Title", "Body", {:generator => "Test", :private => "1"})
       end
     
     end
@@ -188,18 +193,18 @@ describe Tumblr4Rails::Writer do
     describe "create link post" do
     
       it "should receive args with the proper contents" do
-        Tumblr4Rails::Writer.should_receive(:create_post).with(
+        @writer.should_receive(:create_post).with(
           hash_including(:type => :link, :url => "http://www.google.ca")
         ).and_return(@resp)
-        Tumblr4Rails::Writer.create_link_post("http://www.google.ca")
+        @writer.create_link_post("http://www.google.ca")
       end
     
       it "should receive args with additional arguments included" do
-        Tumblr4Rails::Writer.should_receive(:create_post).with(
+        @writer.should_receive(:create_post).with(
           hash_including(:generator => "Test", :private => "0", :name => "Google",
             :description => "A Search Engine")
         ).and_return(@resp)
-        Tumblr4Rails::Writer.create_link_post("http://www.google.ca", 
+        @writer.create_link_post("http://www.google.ca", 
           "Google", "A Search Engine", {:generator => "Test", :private => "0"})
       end
     
@@ -208,17 +213,17 @@ describe Tumblr4Rails::Writer do
     describe "create conversation post" do
     
       it "should receive args with the proper contents" do
-        Tumblr4Rails::Writer.should_receive(:create_post).with(
+        @writer.should_receive(:create_post).with(
           hash_including(:type => :conversation, :conversation => "blah")
         ).and_return(@resp)
-        Tumblr4Rails::Writer.create_conversation_post("blah", nil)
+        @writer.create_conversation_post("blah", nil)
       end
     
       it "should receive args with additional arguments included" do
-        Tumblr4Rails::Writer.should_receive(:create_post).with(
+        @writer.should_receive(:create_post).with(
           hash_including(:generator => "Test", :private => "0", :conversation => "blah")
         ).and_return(@resp)
-        Tumblr4Rails::Writer.create_conversation_post("blah", nil, {:generator => "Test", :private => "0"})
+        @writer.create_conversation_post("blah", nil, {:generator => "Test", :private => "0"})
       end
     
     end
@@ -226,17 +231,17 @@ describe Tumblr4Rails::Writer do
     describe "create quote post" do
     
       it "should receive args with the proper contents" do
-        Tumblr4Rails::Writer.should_receive(:create_post).with(
+        @writer.should_receive(:create_post).with(
           hash_including(:type => :quote, :quote => "a quote")
         ).and_return(@resp)
-        Tumblr4Rails::Writer.create_quote_post("a quote")
+        @writer.create_quote_post("a quote")
       end
     
       it "should receive args with additional arguments included" do
-        Tumblr4Rails::Writer.should_receive(:create_post).with(
+        @writer.should_receive(:create_post).with(
           hash_including(:generator => "Test", :private => "0", :quote => "a quote", :source => "A Source")
         ).and_return(@resp)
-        Tumblr4Rails::Writer.create_quote_post("a quote", "A Source", {:generator => "Test", :private => "0"})
+        @writer.create_quote_post("a quote", "A Source", {:generator => "Test", :private => "0"})
       end
     
     end
@@ -248,22 +253,22 @@ describe Tumblr4Rails::Writer do
       end
     
       it "should receive args with the proper contents" do
-        Tumblr4Rails::Writer.should_receive(:create_post).with(
+        @writer.should_receive(:create_post).with(
           hash_including(:type => :audio, :data => @data, 
             :multipart => true)).and_return(@resp)
-        Tumblr4Rails::Writer.create_audio_post(@data)
+        @writer.create_audio_post(@data)
       end
     
       it "should receive args with additional arguments included" do
-        Tumblr4Rails::Writer.should_receive(:create_post).with(
+        @writer.should_receive(:create_post).with(
           hash_including(:generator => "Test", :private => "0", :multipart => true,
             :caption => "A Song", :data => @data)).and_return(@resp)
-        Tumblr4Rails::Writer.create_audio_post(@data, "A Song", {:generator => "Test", :private => "0"})
+        @writer.create_audio_post(@data, "A Song", {:generator => "Test", :private => "0"})
       end
     
       it "should raise an error if the data parameter is not an instance of Tumblr4Rails::Upload" do
         lambda {
-          Tumblr4Rails::Writer.create_audio_post("Not correct")
+          @writer.create_audio_post("Not correct")
         }.should raise_error
       end
     
@@ -273,7 +278,7 @@ describe Tumblr4Rails::Writer do
     
       it "should raise an exception if the src parameter is blank" do
         lambda {
-          Tumblr4Rails::Writer.create_video_post(nil, nil, nil, {})
+          @writer.create_video_post(nil, nil, nil, {})
         }.should raise_error
       end
         
@@ -284,17 +289,17 @@ describe Tumblr4Rails::Writer do
         end
         
         it "should call create_post with a hash including multipart and data" do
-          Tumblr4Rails::Writer.should_receive(:create_post).
+          @writer.should_receive(:create_post).
             with(hash_including(:type => :video, :multipart => true, :data => @upload))
-          Tumblr4Rails::Writer.create_video_post(@upload, nil, nil, {})
+          @writer.create_video_post(@upload, nil, nil, {})
         end
         
         it "should include the optional parameters when they are supplied" do
-          Tumblr4Rails::Writer.should_receive(:create_post).
+          @writer.should_receive(:create_post).
             with(hash_including(:type => :video, :multipart => true, 
               :data => @upload, :caption => "Caption", :generator => "Test",
               :title => "Title"))
-          Tumblr4Rails::Writer.create_video_post(@upload, "Title", "Caption", {:generator => "Test"})
+          @writer.create_video_post(@upload, "Title", "Caption", {:generator => "Test"})
         end
         
       end
@@ -306,20 +311,20 @@ describe Tumblr4Rails::Writer do
         end
         
         it "should call create_post with a hash including source" do
-          Tumblr4Rails::Writer.should_receive(:create_post).
+          @writer.should_receive(:create_post).
             with(hash_including(:type => :video, :embed => @src))
-          Tumblr4Rails::Writer.should_not_receive(:create_post).
+          @writer.should_not_receive(:create_post).
             with(hash_including(:multipart => true))
-          Tumblr4Rails::Writer.create_video_post(@src, nil, nil, {})
+          @writer.create_video_post(@src, nil, nil, {})
         end
         
         it "should include the optional parameters when they are supplied" do
-          Tumblr4Rails::Writer.should_receive(:create_post).
+          @writer.should_receive(:create_post).
             with(hash_including(:type => :video, :embed => @src, :caption => "Caption",
               :title => "Title", :generator => "Test"))
-          Tumblr4Rails::Writer.should_not_receive(:create_post).
+          @writer.should_not_receive(:create_post).
             with(hash_including(:multipart => true))
-          Tumblr4Rails::Writer.create_video_post(@src, "Title", "Caption", {:generator => "Test"})
+          @writer.create_video_post(@src, "Title", "Caption", {:generator => "Test"})
         end
         
       end
@@ -330,7 +335,7 @@ describe Tumblr4Rails::Writer do
       
       it "should raise an exception if the src parameter is blank" do
         lambda {
-          Tumblr4Rails::Writer.create_photo_post(nil, nil, nil, {})
+          @writer.create_photo_post(nil, nil, nil, {})
         }.should raise_error
       end
         
@@ -341,17 +346,17 @@ describe Tumblr4Rails::Writer do
         end
         
         it "should call create_post with a hash including multipart and data" do
-          Tumblr4Rails::Writer.should_receive(:create_post).
+          @writer.should_receive(:create_post).
             with(hash_including(:type => :photo, :multipart => true, :data => @upload))
-          Tumblr4Rails::Writer.create_photo_post(@upload, nil, nil, {})
+          @writer.create_photo_post(@upload, nil, nil, {})
         end
         
         it "should include the optional parameters when they are supplied" do
-          Tumblr4Rails::Writer.should_receive(:create_post).
+          @writer.should_receive(:create_post).
             with(hash_including(:type => :photo, :multipart => true, 
               :data => @upload, :caption => "Caption", :generator => "Test",
               :"click-through-url" => "http://test.ca"))
-          Tumblr4Rails::Writer.create_photo_post(@upload, "Caption", "http://test.ca", {:generator => "Test"})
+          @writer.create_photo_post(@upload, "Caption", "http://test.ca", {:generator => "Test"})
         end
         
       end
@@ -363,20 +368,20 @@ describe Tumblr4Rails::Writer do
         end
         
         it "should call create_post with a hash including source" do
-          Tumblr4Rails::Writer.should_receive(:create_post).
+          @writer.should_receive(:create_post).
             with(hash_including(:type => :photo, :source => @src))
-          Tumblr4Rails::Writer.should_not_receive(:create_post).
+          @writer.should_not_receive(:create_post).
             with(hash_including(:multipart => true))
-          Tumblr4Rails::Writer.create_photo_post(@src, nil, nil, {})
+          @writer.create_photo_post(@src, nil, nil, {})
         end
         
         it "should include the optional parameters when they are supplied" do
-          Tumblr4Rails::Writer.should_receive(:create_post).
+          @writer.should_receive(:create_post).
             with(hash_including(:type => :photo, :source => @src, :caption => "Caption",
               :"click-through-url" => "http://test.ca", :generator => "Test"))
-          Tumblr4Rails::Writer.should_not_receive(:create_post).
+          @writer.should_not_receive(:create_post).
             with(hash_including(:multipart => true))
-          Tumblr4Rails::Writer.create_photo_post(@src, "Caption", "http://test.ca", {:generator => "Test"})
+          @writer.create_photo_post(@src, "Caption", "http://test.ca", {:generator => "Test"})
         end
         
       end
@@ -386,7 +391,7 @@ describe Tumblr4Rails::Writer do
     describe "create_post" do
     
       def do_create_post(options={})
-        Tumblr4Rails::Writer.send(:create_post, options)
+        @writer.send(:create_post, options)
       end
     
       def create_options
@@ -407,7 +412,7 @@ describe Tumblr4Rails::Writer do
       end
     
       it "should attempt to cleanup the post options before posting to the API" do
-        Tumblr4Rails::Writer.should_receive(:cleanup_post_params).
+        @writer.should_receive(:cleanup_post_params).
           with(hash_including(create_options)).and_return(create_options)
         do_create_post(create_options)
       end
@@ -427,7 +432,7 @@ describe Tumblr4Rails::Writer do
     describe "cleanup_post_params" do
     
       def call_cleanup(options={})
-        Tumblr4Rails::Writer.send(:cleanup_post_params, options)
+        @writer.send(:cleanup_post_params, options)
       end
     
       def create_options
@@ -457,22 +462,22 @@ describe Tumblr4Rails::Writer do
       end
     
       it "should call get_credentials! if there are no credentials in the options" do
-        Tumblr4Rails::Writer.should_receive(:get_credentials!)
+        @writer.should_receive(:get_credentials!)
         call_cleanup(create_options)
       end
     
       it "should not call get_credentials! if there are crednentials provided in the options" do
-        Tumblr4Rails::Writer.should_not_receive(:get_credentials!)
+        @writer.should_not_receive(:get_credentials!)
         call_cleanup(create_options.merge(:email => "test@test.ca", :password => "dsdfsdf"))
       end
     
       it "should get the write url unless the write url is provided in the options" do
-        Tumblr4Rails::Writer.should_receive(:get_write_url!)
+        @writer.should_receive(:get_write_url!)
         call_cleanup(create_options)
       end
     
       it "should not attempt to get the write url if it is provided in the options" do
-        Tumblr4Rails::Writer.should_not_receive(:get_write_url!)
+        @writer.should_not_receive(:get_write_url!)
         call_cleanup(create_options.merge(:write_url => "http://www.test.ca"))
       end
    

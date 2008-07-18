@@ -7,31 +7,31 @@ describe "Tumblr4Rails::LinkPost" do
     @resp = create_mock_write_response
   end
   
-  it "should delegate the work to the Tumblr4Rails::Writer class when save! is called" do
-    Tumblr4Rails::Writer.should_receive(:create_link_post).and_return(@resp)
+  it "should delegate the work to the Tumblr4Rails::Tumblr class when save! is called" do
+    Tumblr4Rails::Tumblr.should_receive(:create_link_post).and_return(@resp)
     @post.save!
   end
   
-  it "should pass in the correct values to Tumblr4Rails::Writer when save! is called" do
-    Tumblr4Rails::Writer.should_receive(:create_link_post).
+  it "should pass in the correct values to Tumblr4Rails::Tumblr when save! is called" do
+    Tumblr4Rails::Tumblr.should_receive(:create_link_post).
       with(@post.url, @post.name, @post.description, {}).and_return(@resp)
     @post.save!
   end
   
-  it "should pass in the correct values and additional values to Tumblr4Rails::Writer when save! is called" do
-    Tumblr4Rails::Writer.should_receive(:create_link_post).
+  it "should pass in the correct values and additional values to Tumblr4Rails::Tumblr when save! is called" do
+    Tumblr4Rails::Tumblr.should_receive(:create_link_post).
       with(@post.url, @post.name, @post.description, hash_including({:test => "1"})).
       and_return(@resp)
     @post.save!(:test => "1")
   end
   
-  it "should delegate the work to the Tumblr4Rails::Reader class when get is called" do
-    Tumblr4Rails::Reader.should_receive(:link_posts)
+  it "should delegate the work to the Tumblr4Rails::Tumblr class when get is called" do
+    Tumblr4Rails::Tumblr.should_receive(:link_posts)
     Tumblr4Rails::LinkPost.get
   end
   
-  it "should pass additional options to the Tumblr4Rails::Reader class when get is called" do
-    Tumblr4Rails::Reader.should_receive(:link_posts).with(hash_including({:id => "12"}))
+  it "should pass additional options to the Tumblr4Rails::Tumblr class when get is called" do
+    Tumblr4Rails::Tumblr.should_receive(:link_posts).with(hash_including({:id => "12"}))
     Tumblr4Rails::LinkPost.get({:id => "12"})
   end
   

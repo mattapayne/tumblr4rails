@@ -2,6 +2,8 @@ module Tumblr4Rails
 
   module PseudoDbc
     
+    private
+    
     def pre_ensure(conditions, &block)
       check_conditions(conditions)
       block.call if block_given?
@@ -11,8 +13,6 @@ module Tumblr4Rails
        block.call if block_given?
        check_conditions(conditions)
     end
-    
-    private
     
     def check_conditions(conditions)
       errors = conditions.inject([]) {|arr, (msg, cond)| arr << msg unless cond; arr;}

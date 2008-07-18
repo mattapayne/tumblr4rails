@@ -2,10 +2,15 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Tumblr4Rails::Reader do
 
+  class TestReader
+    include Tumblr4Rails::Reader
+  end
+  
   describe "dynamically added finders" do
     
     it "should add instance method finders" do
-      finders.each {|meth| Tumblr4Rails::Reader.should respond_to(meth) }
+      @reader = TestReader.new
+      finders.each {|meth| @reader.should respond_to(meth) }
     end
     
   end
@@ -15,8 +20,9 @@ describe Tumblr4Rails::Reader do
   end
     
   before(:each) do
+    @reader = TestReader.new
     @gateway = mock("Gateway")
-    Tumblr4Rails::Reader.stub!(:gateway).and_return(@gateway)
+    @reader.stub!(:gateway).and_return(@gateway)
   end
   
   describe "get_by_id" do
@@ -28,30 +34,30 @@ describe Tumblr4Rails::Reader do
     end
     
     it "should return nil if id is blank" do
-      Tumblr4Rails::Reader.get_by_id(nil).should be_nil
+      @reader.get_by_id(nil).should be_nil
     end
       
     it "should return a Tumblr4Rails::Posts object if more than 1 post is returned" do
       stub_gateway_call(regular_posts_xml)
-      posts = Tumblr4Rails::Reader.get_by_id(4534, false, nil)
+      posts = @reader.get_by_id(4534, false, nil)
       posts.should be_is_a(Tumblr4Rails::Posts)
     end
       
     it "should return a single post if only one post is found (which should be the usual)" do
       stub_gateway_call(video_posts_xml)
-      post = Tumblr4Rails::Reader.get_by_id(343432, false, nil)
+      post = @reader.get_by_id(343432, false, nil)
       post.should be_is_a(Tumblr4Rails::Post)
     end
       
     it "should return JSON if JSON was specified" do
       stub_gateway_call(regular_posts_json)
-      post = Tumblr4Rails::Reader.get_by_id(343432, true, nil)
+      post = @reader.get_by_id(343432, true, nil)
       post.should be_is_a(String)
     end
       
     it "should return JSON wrapped in the specified callback if JSON and a callback are specified" do
       stub_gateway_call(regular_posts_json_callback)
-      post = Tumblr4Rails::Reader.get_by_id(343432, true, "myCallback")
+      post = @reader.get_by_id(343432, true, "myCallback")
       post.should =~ /^myCallback(.*)$/
     end
       
@@ -60,7 +66,7 @@ describe Tumblr4Rails::Reader do
   describe "posts" do
     
     def call_posts(options={})
-      Tumblr4Rails::Reader.send(:posts, options)
+      @reader.send(:posts, options)
     end
     
     before(:each) do
@@ -106,7 +112,7 @@ describe Tumblr4Rails::Reader do
   describe "generate_read_url" do
       
     def call_method(options, json)
-      Tumblr4Rails::Reader.send(:generate_read_url, options, json)
+      @reader.send(:generate_read_url, options, json)
     end
     
     it "should generate a url with json if json specified" do
@@ -132,7 +138,7 @@ describe Tumblr4Rails::Reader do
   describe "ensure_read_url!" do
       
     def call_method(options)
-      Tumblr4Rails::Reader.send(:ensure_read_url!, options)
+      @reader.send(:ensure_read_url!, options)
     end
       
     it "should not raise an exception if the read_url can be determined from the settings" do
@@ -158,7 +164,7 @@ describe Tumblr4Rails::Reader do
   describe "cleanup_read_params!" do
       
     def call_method(options)
-      Tumblr4Rails::Reader.send(:cleanup_read_params!, options)
+      @reader.send(:cleanup_read_params!, options)
     end
       
     before(:each) do
@@ -166,12 +172,12 @@ describe Tumblr4Rails::Reader do
     end
       
     it "should attempt to get the read url from the settings if it is not provided" do
-      Tumblr4Rails::Reader.should_receive(:ensure_read_url!)
+      @reader.should_receive(:ensure_read_url!)
       call_method(default_options)
     end
       
     it "should not attempt to get the read url from the settings if it is provided" do
-      Tumblr4Rails::Reader.should_not_receive(:ensure_read_url!)
+      @reader.should_not_receive(:ensure_read_url!)
       call_method(default_options.merge(:read_url => "http://www.test.ca"))
     end
   end

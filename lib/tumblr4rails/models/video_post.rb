@@ -9,7 +9,7 @@ module Tumblr4Rails
       :video_title => :title, :video_player => :player}.freeze
     
     def self.get(options={})
-      Tumblr4Rails::Reader.video_posts(options)
+      Tumblr4Rails::Tumblr.video_posts(options)
     end
     
     private
@@ -20,7 +20,7 @@ module Tumblr4Rails
     
     def do_save!(additional_params={})
       src = multipart? ? upload_data : embed
-      Tumblr4Rails::Writer.create_video_post(src, title, caption, additional_params)
+      Tumblr4Rails::Tumblr.create_video_post(src, title, caption, additional_params)
     end
     
     def upload_data

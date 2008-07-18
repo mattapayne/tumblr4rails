@@ -8,13 +8,13 @@ module Tumblr4Rails
     @@attr_map = {:conversation_title => :title, :conversation_text => :conversation}.freeze
     
     def self.get(options={})
-      Tumblr4Rails::Reader.conversation_posts(options)
+      Tumblr4Rails::Tumblr.conversation_posts(options)
     end
     
     private
     
     def do_save!(additional_params={})
-      Tumblr4Rails::Writer.create_conversation_post(conversation, title, additional_params)
+      Tumblr4Rails::Tumblr.create_conversation_post(conversation, title, additional_params)
     end
     
     def after_initialized(attributes)
