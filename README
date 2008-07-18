@@ -12,12 +12,12 @@ Configuration
 
 Tumblr4Rails can be configured to use 2 different modes:
 
-1) Application: The Tumblr email, password, read_url and write_url are all statically set
-   when the application starts. It is never necessary to provide these values to
-   the Tumblr methods call. The obvious implication of this mode is that you can only access
-   the Tumblr account that you've specified.
+1) Application: The Tumblr email, password, read_url, write_url and upload_mime_types 
+   are all statically set when the application starts. It is never necessary to 
+   provide these values to the Tumblr methods call. The obvious implication of 
+   this mode is that you can only access the Tumblr account that you've specified.
 
-2) Request: The Tumblr email, password, read_url and/or write_url must be specified with each
+2) Request: The Tumblr email, password, and read_url must be specified with each
    request.
 
 *** The default configuration is request if no configuration is provided. ***
@@ -35,6 +35,8 @@ Tumblr4Rails.configure do |settings|
     settings.password = "your tumblr password"
     settings.read_url = "http://whatever.tumblr.com/api"
     settings.write_url = "The url at tumblr to post to" (optional, defaults to: "http://www.tumblr.com/api/write")
+    settings.upload_mime_types = {".mp3" => "audio/mpeg"} (This must be a hash mapping file
+        extensions to mime types)
 end
 
 Configuration Explanation
@@ -52,6 +54,8 @@ For :application
     4) read_url must be set to the name of your tumblr log (ie: http://(log_name).tumblr.com/api)
     5) write_url can optionally be set. It defaults to http://www.tumblr.com/api/write
     - Setting any other value will result in an exception being thrown.
+    6) upload_mime_types - use this to specify additional mime types for uploading
+       in addition to those defined in upload.rb
 
 The API (Consists of a Read API and a Write API)
 ================================================
@@ -179,7 +183,7 @@ Write API:
  use the class methods provided by the Tumblr4Rails::Tumblr class or you can
  use the save and save! instance methods provided by the Post objects.
  
- In all cases, a Tumblr4Rails::PostCreationResponse is returned that provides
+ In all cases, a Tumblr4Rails::Response is returned that provides
  access to the response code, the response message and response body. Typically
  the response body will be the id of the newly-created post.
 

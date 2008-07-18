@@ -41,14 +41,10 @@ module Tumblr4Rails
     
     module InstanceMethods
       
-      private
+      protected
       
-      def tumblr_reader
-        Tumblr4Rails::Reader
-      end
-      
-      def tumblr_writer
-        Tumblr4Rails::Writer
+      def tumblr
+        Tumblr4Rails::Tumblr
       end
       
     end
