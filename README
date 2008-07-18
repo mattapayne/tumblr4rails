@@ -212,7 +212,7 @@ Write methods available on the Tumblr4Rails::Tumblr object (all are class method
 Examples:
 ========
 
-result = Tumblr4Rails::Tumble.create_regular_post("This is the title", "This is the body", {:generator => "Tumblr4Rails"})
+result = Tumblr4Rails::Tumblr.create_regular_post("This is the title", "This is the body", {:generator => "Tumblr4Rails"})
 
 Write methods available on the Post objects (all are class methods):
 ===================================================================
@@ -241,7 +241,56 @@ post.save!
 
 post.url = "http://www.somethingelse.com" #exception because url= is no longer available since the post
                                            has been created.
-                   
+
+Uploading Audio, Video and Image files:
+=======================================
+
+1) Uploading Audio:
+    a) Tumblr4Rails::Tumblr.create_audio_post(src, caption=nil, additional_options={})
+        **In this case, the src parameter must be an instance of Tumblr4Rails::Upload
+          This class includes the file data, the filename and the mime type of the file
+          to upload.
+    b) Tumblr4Rails::AudioPost.new(:filename => "test.mp3", :data => filedata, etc.)
+        ** In this case, pass the filename, the raw file data and any additional data to
+           the constructor as a hash.
+
+2) Uploading Video:
+    a) Tumblr4Rails::Tumblr.create_video_post(src, title=nil, caption=nil, additional_options={})
+        ** In this case, the src parameter can be either an embed url or an instance
+           of Tumblr4Rails::Upload.
+    b) Tumblr4Rails::VideoPost.new(:filename => "a_video.mpeg", :data => filedata, etc.)
+        ** In this case, pass the filename, the raw file data and any additional data to
+           the constructor as a hash.
+
+2) Uploading Images:
+    a) Tumblr4Rails::Tumblr.create_photo_post(src, caption=nil, click_through_url=nil, additional_options={})
+        ** In this case, the src parameter can be either an image source url or an instance
+           of Tumblr4Rails::Upload.
+    b) Tumblr4Rails::VideoPost.new(:filename => "a_pic.jpeg", :data => filedata, etc.)
+        ** In this case, pass the filename, the raw file data and any additional data to
+           the constructor as a hash.
+
+From a controller, it's trivial to capture uploaded file data. Using an image file,
+for example:
+
+caption = params[:caption]
+click_through_url = params[:click_through_url]
+data = params[:upload_data]
+filename = data.original_filename
+
+Using the objectm model:
+========================
+
+photo_post = Tumblr4Rails::PhotoPost.new(:filename => filename, :data => data.read,
+                :caption => caption, :click_through_url => click_through_url)
+photo_post.save! (or photo_post.save)
+
+Using the Tumblr4Rails::Tumblr class:
+=====================================
+
+upload = Tumblr4Rails::Upload.new(filename, data.read)
+result = Tumblr4Rails::Tumblr.create_photo_post(upload, caption, click_through_url)
+
 Other Write API methods:
 ========================
 
