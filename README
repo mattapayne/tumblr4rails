@@ -82,7 +82,7 @@ class MyController < ApplicationController
 
 end
 
-So it's possible to make calls against either Tumblr4Rail::Tumblr or just Tumblr if the Tumblr4Rails
+It's also possible to make calls against either Tumblr4Rail::Tumblr or just Tumblr if the Tumblr4Rails
 module has been included.
 
 Additionally, there is an object model that can be used. The object model consists of classes
