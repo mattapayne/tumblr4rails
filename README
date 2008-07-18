@@ -64,12 +64,22 @@ The Tumblr4Rails plugin can be used from any controller, model, helper or even v
 
 You can also include the Tumblr4Rails module if you'd rather not have to specify the module name.
 
-Additionally, each controller has a class method of simply: use_tumblr. This causes the Tumblr4Rails
-module to be included in your controller class. Use like so:
+Additionally, each controller has a class method of simply: use_tumblr. This adds a protected 
+method called 'tumblr' (an instance of Tumblr4Rails::Tumblr) to your controller class. Use like so:
 
 class MyController < ApplicationController
-	use_tumblr
-	#other stuff
+
+  use_tumblr
+
+  def index
+    #keeping in mind that 50 is the most that can be retrieved in a call.
+    @posts = tumblr.all_posts(:limit => 50)
+  end
+
+  def show
+    @post = tumblr.get_by_id(params[:id])
+  end
+
 end
 
 So it's possible to make calls against either Tumblr4Rail::Tumblr or just Tumblr if the Tumblr4Rails
