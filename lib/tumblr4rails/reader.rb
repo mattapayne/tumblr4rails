@@ -37,9 +37,10 @@ module Tumblr4Rails
       
       #Options:
       #:type => The type of post (:regular, :quote, :photo, :link, :conversation, :video, :audio)
-      #:limit => The number of posts to return (minimum 1, maximum 50) - alias for num
-      #:index => The post offset to start from. - alias for start
+      #:num => The number of posts to return (minimum 1, maximum 50)
+      #:limit => alias for num
       #:start => The post offset to start from
+      #:index => alias for start
       #:id => The id of the specific post. If this is used, all other params are ignored.
       #:json => if json => true, the response will be a json string
       #:callback => using in conjunction with json => true, specifies a javascript method to
