@@ -85,7 +85,7 @@ class MyController < ApplicationController
 
 end
 
-It's also possible to make calls against either Tumblr4Rail::Tumblr or just Tumblr if the Tumblr4Rails
+It's also possible to make calls against either Tumblr4Rails::Tumblr or just Tumblr if the Tumblr4Rails
 module has been included.
 
 Additionally, there is an object model that can be used. The object model consists of classes
@@ -117,6 +117,25 @@ Read methods available on the Tumblr4Rails::Tumblr object (all are class methods
 10) get_by_id(id, json=false, callback=nil) - id = The post id, json - whether to return json or not, callback - name of a js
 callback to call with the results.
 
+Meaning Of Parameters:
+======================
+
+a) id - The id of the post in question. If this parameter is used, limit, type and start become
+        meaningless as you will only be retrieving a single post.
+b) num - The number of posts to retrieve. The minimum is 1. The maximum is 50.
+         Setting this to less than 1 will result in it's value being set to 1.
+         Setting this to greater than 50 will result in it's value being set to 50.
+c) start - The numerical offset within a set of posts from which to being. Can be useful
+           when paging is required. This is 0 based, so the first post would be at
+           position 0.
+d) index - An alias for start
+e) limit - An alias for num
+f) json - A true or false value indicating that the response should be in the
+          form of a JSON string that can be evaluated within javascript. Useful for
+          AJAX style calls.
+g) callback - A javascript callback to invoke when the request returns. Also useful
+              in AJAX style calls. The parameter is removed if json = false.
+
 Examples:
 =========
 
@@ -135,6 +154,7 @@ Read methods available on the Post objects (all are class methods):
 Examples:
 =========
 
+posts = Tumblr4Rails::Post.get(:start => 2) - Any posts past the 2nd position up to a miximum of 20.
 posts = Tumble4Rails::LinkPost.get() - returns all link posts
 posts = Tumblr4Rails::RegularPost.get(:limit => 5) - returns 5 regular posts (or less if there are not 5)
 post = Tumblr4Rails::Post.get_by_id(1223443, true, "showResult") - returns the post corresponding to the specified id in the form of a
