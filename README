@@ -124,7 +124,7 @@ a) id - The id of the post in question. If this parameter is used, limit, type a
 b) num - The number of posts to retrieve. The minimum is 1. The maximum is 50.
          Setting this to less than 1 will result in it's value being set to 1.
          Setting this to greater than 50 will result in it's value being set to 50.
-c) start - The numerical offset within a set of posts from which to being. Can be useful
+c) start - The numerical offset within a set of posts from which to begin. Can be useful
            when paging is required. This is 0 based, so the first post would be at
            position 0.
 d) index - An alias for start
