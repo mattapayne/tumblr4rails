@@ -114,8 +114,7 @@ Read methods available on the Tumblr4Rails::Tumblr object (all are class methods
 7) audio_posts(options={}) - :limit (alias for :num), :index (alias for :start), :num, :start, :json, :callback
 8) video_posts(options={}) - :limit (alias for :num), :index (alias for :start), :num, :start, :json, :callback
 9) all_posts(options={}) - :limit (alias for :num), :index (alias for :start), :num, :start, :json, :callback
-10) get_by_id(id, json=false, callback=nil) - id = The post id, json - whether to return json or not, callback - name of a js
-callback to call with the results.
+10) get_by_id(id, json=false, callback=nil)
 
 Meaning Of Parameters:
 ======================
