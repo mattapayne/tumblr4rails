@@ -18,7 +18,8 @@ Tumblr4Rails can be configured to use 2 different modes:
    this mode is that you can only access the Tumblr account that you've specified.
 
 2) Request: The Tumblr email, password, and read_url must be specified with each
-   request.
+   request. upload_mime_types and write_url can be set (since they are not generally 
+   user-specific).
 
 *** The default configuration is request if no configuration is provided. ***
 
@@ -44,8 +45,10 @@ Configuration Explanation
 
 For :request
     1) all that is required is setting the value of request_type to :request.
-    - its easier to not even create the configure block.
-    - setting any other values will result in an exception being thrown.
+    - it can be useful to set upload_mime_types and write_url so that they
+      do not need to be specified with each request, Although there are some logical
+      defaults for upload_mime_types and a default for write_url, so they do
+      not need to be explicitly set.
 
 For :application
     1) request_type must be set to :application.
