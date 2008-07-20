@@ -234,10 +234,10 @@ Write methods available on the Tumblr4Rails::Tumblr object (all are class method
   				
 1) create_regular_post(title, body, additional_options={})
 2) create_link_post(url, name=nil, description=nil, additional_options={})
-3) create_photo_post(source=nil, data=nil, caption=nil, additional_options={})
-4) create_audio_post(source=nil, data=nil, caption=nil, additional_options={}) #Note that either source or data must be present.
-5) create_video_post(embed=nil, data=nil, title=nil, caption=nil, additional_options={}) #Note that either embed or data must be present.
-6) create_conversation_post(conversation, title=nil, additional_options={}) #Note that the converation should be separated by newlines
+3) create_photo_post(src, caption=nil, click_through_url=nil, additional_options={})
+4) create_audio_post(src, caption=nil, additional_options={})
+5) create_video_post(src, title=nil, caption=nil, additional_options={})
+6) create_conversation_post(conversation, title=nil, additional_options={}) #Note that the conversation should be separated by newlines
    in order to appear properly in the Tumblr UI. See the comments in the code.
 7) create_quote_post(quote, source=nil, additional_options={})
 
