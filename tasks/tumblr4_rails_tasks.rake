@@ -12,7 +12,6 @@ namespace :tumblr4rails do
     specdir = File.expand_path(File.join(File.dirname(__FILE__), "/../", "spec"))
     t.spec_opts = ['--options', "\"#{specdir}/spec.opts\""]
     t.spec_files = FileList["#{specdir}/**/*_spec.rb"]
-    t.rcov = true
   end
   
 end

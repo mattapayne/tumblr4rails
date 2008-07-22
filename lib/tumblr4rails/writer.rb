@@ -13,6 +13,7 @@ module Tumblr4Rails
     module WriteMethods
       
       include Tumblr4Rails::PseudoDbc
+      include Tumblr4Rails::MissingMethodHandler
       
       #With the exception of the "Other Actions", all write calls return:
       #201 - Created along with the newly created item's id
@@ -175,16 +176,6 @@ module Tumblr4Rails
       
       def gateway
         @tumblr_gateway ||= Tumblr4Rails::HttpGateway.new
-      end
-      
-      def method_missing(method_name, *args)
-        if method_name.to_s =~ /.+_provided?/
-          options = args.flatten.first
-          thing = method_name.to_s.slice(0...(method_name.to_s.index("_provided?")))
-          return options.key?(thing.to_sym) && !options[thing.to_sym].blank?
-        else
-          super
-        end
       end
       
     end
