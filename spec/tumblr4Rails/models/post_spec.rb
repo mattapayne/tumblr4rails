@@ -47,8 +47,8 @@ describe "Tumblr4Rails::Post" do
     @post.save.should be_true
   end
   
-  it "should raise an exception from save! if the class is marked readonly" do
-    @post.stub!(:readonly?).and_return(true)
+  it "should raise an exception from save! if the class is marked frozen" do
+    @post.stub!(:frozen?).and_return(true)
     lambda {@post.save!}.should raise_error
   end
   

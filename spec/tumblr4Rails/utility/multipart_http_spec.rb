@@ -10,7 +10,7 @@ describe Tumblr4Rails::MultipartHttp do
   it "should properly convert a textual key/value pair to a multipart" do
     hash = {:one => "test", :two => "test2"}
     multi = convert_to_multipart(hash)
-      multi.should_not be_nil
+    multi.should_not be_nil
   end
   
   it "should properly convert an upload to a multipart" do
