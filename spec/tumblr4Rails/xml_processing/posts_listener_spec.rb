@@ -56,4 +56,12 @@ describe Tumblr4Rails::PostsListener do
     @listener.should_not be_processing_photo_url
   end
   
+  it "should not raise an exception when passed a bad start tag name" do
+    lambda {@listener.tag_start("blah", {})}.should_not raise_error
+  end
+  
+  it "should not raise an exception when passed a bad end tag name" do
+    lambda {@listener.tag_end("blah")}.should_not raise_error
+  end
+  
 end
