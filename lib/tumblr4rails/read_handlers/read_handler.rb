@@ -27,13 +27,13 @@ module Tumblr4Rails
       protected
       
       def ensure_start!
-        if options[:start] && options[:start].to_i < MIN_START
+        if start_provided? && options[:start].to_i < MIN_START
           options[:start] = MIN_START
         end
       end
       
       def ensure_number!
-        if options.key?(:num)
+        if num_provided?
           options[:num] = MIN_NUMBER if options[:num].to_i < MIN_NUMBER
           options[:num] = MAX_NUMBER if options[:num].to_i > MAX_NUMBER
         end
