@@ -41,10 +41,10 @@ module Tumblr4Rails
       
       def cleanse!
         options.reject! {|k, v| v.blank? || !possible_params.include?(k)}
-        if options.key?(:id)
+        if id_provided?
           options.reject! {|k, v| params_to_remove_if_id_present.include?(k)}
         end
-        options.delete(:callback) unless options.key?(:json)
+        options.delete(:callback) unless json_provided?
         options.reject! {|k, v| (k == :type && v.to_sym == :all)}
       end
       
