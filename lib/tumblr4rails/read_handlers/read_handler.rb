@@ -34,16 +34,17 @@ module Tumblr4Rails
       
       def ensure_number!
         if num_provided?
-          options[:num] = MIN_NUMBER if options[:num].to_i < MIN_NUMBER
-          options[:num] = MAX_NUMBER if options[:num].to_i > MAX_NUMBER
+          if options[:num].to_i < MIN_NUMBER
+            options[:num] = MIN_NUMBER
+          elsif options[:num].to_i > MAX_NUMBER
+            options[:num] = MAX_NUMBER
+          end
         end
       end
       
       def cleanse!
         options.reject! {|k, v| v.blank? || !possible_params.include?(k)}
-        if id_provided?
-          options.reject! {|k, v| params_to_remove_if_id_present.include?(k)}
-        end
+        options.reject! {|k, v| params_to_remove_if_id_present.include?(k)} if id_provided?
         options.delete(:callback) unless json_provided?
         options.reject! {|k, v| (k == :type && v.to_sym == :all)}
       end
