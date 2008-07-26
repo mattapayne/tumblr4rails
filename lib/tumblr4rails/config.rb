@@ -2,15 +2,13 @@ module Tumblr4Rails
   
   class Config   
     
-    attr_accessor :password, :email, :request_type, :write_url, 
-      :read_url, :upload_mime_types
+    attr_accessor :password, :email, :request_type, :write_url, :read_url
     
     DEFAULT_WRITE_URL = "http://www.tumblr.com/api/write"
     
     def initialize
       self.request_type = Tumblr4Rails::RequestType.request
       self.write_url = DEFAULT_WRITE_URL
-      self.upload_mime_types = {}
     end
     
     def errors

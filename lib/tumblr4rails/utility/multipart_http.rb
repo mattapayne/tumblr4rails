@@ -19,6 +19,7 @@ module Tumblr4Rails
       return if data.blank?
       params = data.inject([]) do |arr, (key, value)|
         if value.is_a?(Tumblr4Rails::Upload)
+          raise ArgumentError.new("A mime type must be provided.") if value.mime_type.blank?
           arr << file_to_multipart(key, value.filename, value.mime_type.to_s, value.content)
         else
           arr << text_to_multipart(key, value)

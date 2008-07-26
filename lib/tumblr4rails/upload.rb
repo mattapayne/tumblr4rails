@@ -1,24 +1,8 @@
+require 'mime/types'
+
 module Tumblr4Rails
   
   class Upload
-   
-    @@default_mime_types = {
-      ".jpg"=>"image/jpeg",
-      ".jpeg"=>"image/jpeg",
-      ".wmv"=>"video/x-msvideo",
-      ".gif"=>"image/gif",
-      ".bmp"=>"image/bmp",
-      ".png"=>"image/png",
-      ".mp3"=>"audio/mpeg",
-      ".xml"=>"application/xml",
-      ".dvi" => "application/x-dvi",
-      ".mp2" => "video/mpeg",
-      ".mpa" => "video/mpeg",
-      ".mpe" => "video/mpeg",
-      ".mpeg" => "video/mpeg",
-      ".qt" => "video/quicktime",
-      ".mov" => "video/quicktime"
-    }.freeze
     
     attr_reader :filename, :mime_type, :content
     
@@ -30,15 +14,12 @@ module Tumblr4Rails
     private
     
     def get_mime_type
-      lookup_mime_type(File.extname(@filename)) unless @filename.blank?
-    end
-    
-    def lookup_mime_type(extension)
-      types = @@default_mime_types.dup
-      unless Tumblr4Rails.configuration.upload_mime_types.blank?
-        types.merge!(Tumblr4Rails.configuration.upload_mime_types)
+      unless @filename.blank?
+        types = MIME::Types.type_for(@filename)
+        unless types.blank?
+          @mime_type = types.first.to_s
+        end
       end
-      types[extension.downcase]
     end
     
   end

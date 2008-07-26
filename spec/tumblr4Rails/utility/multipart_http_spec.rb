@@ -23,4 +23,11 @@ describe Tumblr4Rails::MultipartHttp do
     convert_to_multipart({}).should be_nil
   end
   
+  it "should raise an exception when the mime type is unknown" do
+    up = Tumblr4Rails::Upload.new("Test.fdgdd", "dsdsdsdsadasd")
+    lambda {
+      convert_to_multipart({:one => "test", :data => up})
+    }.should raise_error
+  end
+  
 end

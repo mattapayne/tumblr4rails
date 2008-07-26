@@ -7,19 +7,21 @@ to your Rails classes.
 
 ** Only Rails 2.1 is supported **
 
+** This plugin has a dependency on the mime-types gem 
+   sudo gem install mime-types **
+
 Configuration
 =============
 
 Tumblr4Rails can be configured to use 2 different modes:
 
-1) Application: The Tumblr email, password, read_url, write_url and upload_mime_types 
+1) Application: The Tumblr email, password, read_url and write_url
    are all statically set when the application starts. It is never necessary to 
    provide these values to the Tumblr methods call. The obvious implication of 
    this mode is that you can only access the Tumblr account that you've specified.
 
 2) Request: The Tumblr email, password, and read_url must be specified with each
-   request. upload_mime_types and write_url can be set (since they are not generally 
-   user-specific).
+   request. The write_url property can be set (since it is not generally user-specific).
 
 *** The default configuration is request if no configuration is provided. ***
 
@@ -36,8 +38,6 @@ Tumblr4Rails.configure do |settings|
     settings.password = "your tumblr password"
     settings.read_url = "http://whatever.tumblr.com/api"
     settings.write_url = "The url at tumblr to post to" (optional, defaults to: "http://www.tumblr.com/api/write")
-    settings.upload_mime_types = {".mp3" => "audio/mpeg"} (This must be a hash mapping file
-        extensions to mime types)
 end
 
 Configuration Explanation
@@ -45,10 +45,9 @@ Configuration Explanation
 
 For :request
     1) all that is required is setting the value of request_type to :request.
-    - it can be useful to set upload_mime_types and write_url so that they
-      do not need to be specified with each request, Although there are some logical
-      defaults for upload_mime_types and a default for write_url, so they do
-      not need to be explicitly set.
+    - it can be useful to set the write_url so that it does not need to be 
+      specified with each request, although it is not necessary since it will
+      use Tumblr's default API write url by default.
 
 For :application
     1) request_type must be set to :application.
@@ -57,8 +56,6 @@ For :application
     4) read_url must be set to the name of your tumblr log (ie: http://(log_name).tumblr.com/api)
     5) write_url can optionally be set. It defaults to http://www.tumblr.com/api/write
     - Setting any other value will result in an exception being thrown.
-    6) upload_mime_types - use this to specify additional mime types for uploading
-       in addition to those defined in upload.rb
 
 The API (Consists of a Read API and a Write API)
 ================================================
