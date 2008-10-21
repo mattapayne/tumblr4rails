@@ -243,7 +243,7 @@ Examples:
 
 result = Tumblr4Rails::Tumblr.create_regular_post("This is the title", "This is the body", {:generator => "Tumblr4Rails"})
 
-Write methods available on the Post objects (all are class methods):
+Write methods available on the Post objects (all are instance methods):
 ===================================================================
 
 **Note - When a new post is created in this manner, if it is created successfully, it's tumblr_id will be set
